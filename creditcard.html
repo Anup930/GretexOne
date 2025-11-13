@@ -35,7 +35,6 @@
     .bill-table th, .bill-table td { padding:12px 16px; text-align:left; border-bottom:1px solid #eef2f7; }
     .no-bills-message { padding:20px; text-align:center; color:#777; background:#f9f9f9; border-radius:8px; }
     .loading-spinner { text-align:center; padding:50px; font-size:1.2rem; color:#555; }
-    /* Modal */
     .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.6); display:none; align-items:center; justify-content:center; z-index:1000; }
     .modal-overlay.visible { display:flex; }
     .modal-content { background:#fff; border-radius:12px; padding:24px; width:100%; max-width:520px; box-shadow:0 10px 30px rgba(0,0,0,0.1); }
@@ -128,21 +127,13 @@
 
 <script>
 /*
-  Dual-mode client:
-
-  - If page is served by Apps Script (google.script.run present), calls will be made
-    via google.script.run.<function>(params) and results handled via callbacks.
-
-  - Otherwise (e.g., GitHub Pages), the client will POST JSON to SCRIPT_URL via fetch().
-    Ensure SCRIPT_URL is your deployed Apps Script "exec" URL.
-
-  Important: If using GitHub Pages *and* you get CORS errors, host the UI in Apps Script
-  (recommended), or proxy requests via a CORS-enabled service.
+  NOTE:
+  - If hosting on GitHub Pages: change SCRIPT_URL below to your deployed Apps Script exec URL (https://script.google.com/macros/s/AKfy.../exec).
+  - If serving from Apps Script web app: open the web app URL (do not open the GitHub page)—the page will use google.script.run automatically.
 */
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyH5kOEdJGlPgx4sMH3vEqkixalf3X6PACttZHMLWh8M-TtLT2OUN5U_XRMGP-VWAfW/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyH5kOEdJGlPgx4sMH3vEqkixalf3X6PACttZHMLWh8M-TtLT2OUN5U_XRMGP-VWAfW/exec"; // <--- replace only if hosting on GitHub
 
-// detect runtime mode
 const USE_GOOGLE_RUN = (typeof google !== 'undefined' && google && google.script && google.script.run);
 
 let currentUser = null;
@@ -151,13 +142,11 @@ let allCardData = [];
 document.addEventListener("DOMContentLoaded", () => {
   const userString = sessionStorage.getItem("gretexUser");
   if (!userString) {
-    // If you rely on login, redirect to index.html
     window.location.href = "index.html";
     return;
   }
   currentUser = JSON.parse(userString);
 
-  // Wire up UI
   document.getElementById('add-new-card-btn').addEventListener('click', () => showModal('add-card-modal'));
   document.querySelectorAll('[data-close]').forEach(btn => btn.addEventListener('click', () => closeModal(btn.dataset.close)));
   document.querySelectorAll('.modal-overlay').forEach(overlay => overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(overlay.id); }));
@@ -179,49 +168,36 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // initial load
   loadDashboard();
 });
 
 function showModal(id){ document.getElementById(id).classList.add('visible'); }
-function closeModal(id){
-  const m = document.getElementById(id); m.classList.remove('visible');
-  const f = m.querySelector('form'); if (f) f.reset();
-}
-
-// helpers
+function closeModal(id){ const m=document.getElementById(id); m.classList.remove('visible'); const f=m.querySelector('form'); if(f) f.reset(); }
 function escapeHtml(s){ if (s === null || s === undefined) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
 function fileToBase64(file){ return new Promise((resolve,reject)=>{ const r=new FileReader(); r.readAsDataURL(file); r.onload=()=>resolve(r.result.split(',')[1]); r.onerror=err=>reject(err); }); }
 function displayError(msg){ const el=document.getElementById('error-info'); el.style.display='block'; el.textContent = msg; }
 
-// =================== Backend call wrappers ===================
 function serverCall(action, params){
   if (USE_GOOGLE_RUN) {
-    // Use google.script.run when served by Apps Script
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve,reject) => {
       google.script.run.withSuccessHandler(resolve).withFailureHandler(reject)[action](params);
     });
   } else {
-    // Use fetch to remote exec URL (GitHub Pages). Must use deployed exec URL.
     return fetch(SCRIPT_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json;charset=utf-8' },
       body: JSON.stringify({ action, params })
     }).then(async res => {
-      // Try parse JSON, but if server returned HTML (e.g., auth page), include text for debug
       const txt = await res.text();
-      try {
-        return JSON.parse(txt);
-      } catch (err) {
-        throw new Error('Invalid JSON response from server. Response text: ' + txt.slice(0,200));
-      }
+      try { return JSON.parse(txt); }
+      catch (err) { throw new Error('Invalid JSON response from server. Response text: ' + txt.slice(0,300)); }
     });
   }
 }
 
-// =================== Load Dashboard ===================
 async function loadDashboard(){
-  showLoading(true); document.getElementById('error-info').style.display='none';
+  showLoading(true);
+  document.getElementById('error-info').style.display='none';
   try {
     const json = await serverCall('getCreditCardDashboard', { userName: (currentUser && currentUser.name) || '' });
     if (json && json.status === 'success') {
@@ -233,13 +209,12 @@ async function loadDashboard(){
     }
   } catch (err) {
     showError('Network/server error: ' + (err && err.message ? err.message : err));
-    displayError('If you are hosting this page on GitHub Pages, make sure SCRIPT_URL is the deployed Apps Script exec URL and that the script is accessible. If you are using Apps Script web app, open the web app URL (not GitHub).');
+    displayError('If you host this page on GitHub Pages and see CORS errors, either open the Apps Script web app URL (recommended), or use a small proxy that adds Access-Control-Allow-Origin header.');
   } finally {
     showLoading(false);
   }
 }
 
-// =================== Renderers ===================
 function renderDashboard(cards){
   const d = document.getElementById('card-dashboard'); d.innerHTML = '';
   if (!cards || cards.length === 0) {
@@ -252,8 +227,8 @@ function createCardModule(card){
   card.bills = card.bills || [];
   const pending = card.bills.filter(b => (String(b.status || '').toLowerCase()).includes('pending'));
   const paid = card.bills.filter(b => (String(b.status || '').toLowerCase()).includes('paid'));
-  const issuer = card.issuer || card.Issuer || card.cardIssuer || '';
-  const last4 = card.last4 || card.Last4 || card.last4 || '';
+  const issuer = card.issuer || card.Issuer || '';
+  const last4 = card.last4 || card.Last4 || '';
   const nameOnCard = card.nameOnCard || card.NameOnCard || '';
   const wrap = document.createElement('div'); wrap.className='card-module';
   wrap.innerHTML = `
@@ -301,15 +276,13 @@ function renderBillTable(bills,type){
   return `<table class="bill-table"><thead><tr>${headers}</tr></thead><tbody>${rows}</tbody></table>`;
 }
 
-// =================== UI helpers ===================
 function showLoading(flag){ const s=document.getElementById('loading-spinner'); if (s) s.style.display = flag ? 'block':'none'; }
 function showError(message){ alert("Error: "+message); const dashboard=document.getElementById('card-dashboard'); dashboard.innerHTML = `<div class="no-bills-message" style="background:#fff8f8; color:#c00;">${escapeHtml(message)}</div>`; }
 
-// =================== Form handlers ===================
 async function handleAddCard(e){
   e.preventDefault();
-  const btn = document.getElementById('save-card-btn'); btn.disabled=true; btn.textContent='Saving...';
-  const params = { issuer: document.getElementById('card-issuer').value, last4: document.getElementById('card-last-4').value, nameOnCard: document.getElementById('card-name').value, addedBy: (currentUser&&currentUser.name)||'unknown' };
+  const btn=document.getElementById('save-card-btn'); btn.disabled=true; btn.textContent='Saving...';
+  const params={ issuer: document.getElementById('card-issuer').value, last4: document.getElementById('card-last-4').value, nameOnCard: document.getElementById('card-name').value, addedBy: (currentUser && currentUser.name) || 'unknown' };
   try {
     const json = await serverCall('addCreditCard', params);
     if (json && json.status === 'success') { closeModal('add-card-modal'); await loadDashboard(); }
@@ -322,19 +295,16 @@ async function handleAddBill(e){
   e.preventDefault();
   const btn=document.getElementById('save-bill-btn'); btn.disabled=true; btn.textContent='Saving...';
   try {
-    let attachment = null;
+    let attachment=null;
     const f=document.getElementById('bill-attachment');
-    if (f && f.files && f.files.length>0) {
-      const b64 = await fileToBase64(f.files[0]);
-      attachment = { filename: f.files[0].name, mimeType: f.files[0].type, data: b64 };
-    }
+    if (f && f.files && f.files.length>0) { const b64 = await fileToBase64(f.files[0]); attachment = { filename: f.files[0].name, mimeType: f.files[0].type, data: b64 }; }
     const params = {
       cardId: document.getElementById('bill-card-id').value,
       billNumber: document.getElementById('bill-number').value,
       billDate: document.getElementById('bill-date').value,
       dueDate: document.getElementById('bill-due-date').value,
       amount: parseFloat(document.getElementById('bill-amount').value),
-      addedBy: (currentUser&&currentUser.name)||'unknown',
+      addedBy: (currentUser && currentUser.name) || 'unknown',
       attachment
     };
     const json = await serverCall('addBill', params);
@@ -348,18 +318,15 @@ async function handleAddPayment(e){
   e.preventDefault();
   const btn=document.getElementById('save-payment-btn'); btn.disabled=true; btn.textContent='Saving...';
   try {
-    let attachment = null;
+    let attachment=null;
     const f=document.getElementById('payment-attachment');
-    if (f && f.files && f.files.length>0) {
-      const b64 = await fileToBase64(f.files[0]);
-      attachment = { filename: f.files[0].name, mimeType: f.files[0].type, data: b64 };
-    }
+    if (f && f.files && f.files.length>0) { const b64 = await fileToBase64(f.files[0]); attachment = { filename: f.files[0].name, mimeType: f.files[0].type, data: b64 }; }
     const params = {
       billId: document.getElementById('payment-bill-id').value,
       txnNo: document.getElementById('payment-txn-no').value,
       payDate: document.getElementById('payment-date').value,
       payAmount: parseFloat(document.getElementById('payment-amount').value),
-      paidBy: (currentUser&&currentUser.name)||'unknown',
+      paidBy: (currentUser && currentUser.name) || 'unknown',
       attachment
     };
     const json = await serverCall('markBillPaid', params);
