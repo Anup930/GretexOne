@@ -1,4 +1,4 @@
-<!-- V1.1 -->
+<!-- V1.2 -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -195,19 +195,22 @@
 
   // LOAD DASHBOARD
   async function loadDashboard(){
-    showLoading(true);
-    const payload = { action: "getCreditCardDashboard", params: { userName: (currentUser && currentUser.name) || "" } };
-    try {
-      const res = await fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json;charset=utf-8' }, body: JSON.stringify(payload) });
-      const json = await res.json();
-      if (json.status === "success") {
-        allCardData = json.data || [];
-        renderDashboard(allCardData);
-      } else showError(json.data?.message || "Could not load data.");
-    } catch (err) {
-      showError("Network error: " + err.message);
-    } finally { showLoading(false); }
-  }
+  showLoading(true);
+  // Use google.script.run when the page is served by Apps Script
+  google.script.run.withSuccessHandler(function(json){
+    showLoading(false);
+    if (json && json.status === "success") {
+      allCardData = json.data || [];
+      renderDashboard(allCardData);
+    } else {
+      showError((json && json.data && json.data.message) || "Could not load data.");
+    }
+  }).withFailureHandler(function(err){
+    showLoading(false);
+    showError("Server error: " + (err && err.message ? err.message : err));
+  }).getCreditCardDashboard({ userName: (currentUser && currentUser.name) || "" });
+}
+
 
   function renderDashboard(cards){
     const dashboard = document.getElementById('card-dashboard'); dashboard.innerHTML = '';
@@ -274,17 +277,31 @@
 
   // ------------------- Form Handlers -------------------
   async function handleAddCard(e){
-    e.preventDefault();
-    const btn = document.getElementById('save-card-btn'); btn.disabled = true; btn.textContent = 'Saving...';
-    const payload = { action: "addCreditCard", params: { issuer: document.getElementById('card-issuer').value, last4: document.getElementById('card-last-4').value, nameOnCard: document.getElementById('card-name').value, addedBy: (currentUser && currentUser.name) || 'unknown' } };
-    try {
-      const res = await fetch(SCRIPT_URL, { method:'POST', headers:{ 'Content-Type':'application/json;charset=utf-8' }, body: JSON.stringify(payload) });
-      const json = await res.json();
-      if (json.status === 'success') { closeModal('add-card-modal'); await loadDashboard(); }
-      else alert('Error: ' + (json.data?.message || 'Could not save card'));
-    } catch (err) { alert('Network Error: ' + err.message); }
-    finally { btn.disabled = false; btn.textContent = 'Save Card'; }
-  }
+  e.preventDefault();
+  const btn = document.getElementById('save-card-btn');
+  btn.disabled = true; btn.textContent = 'Saving...';
+
+  const params = {
+    issuer: document.getElementById('card-issuer').value,
+    last4: document.getElementById('card-last-4').value,
+    nameOnCard: document.getElementById('card-name').value,
+    addedBy: (currentUser && currentUser.name) || 'unknown'
+  };
+
+  google.script.run.withSuccessHandler(function(json){
+    btn.disabled = false; btn.textContent = 'Save Card';
+    if (json && json.status === 'success') {
+      closeModal('add-card-modal');
+      loadDashboard();
+    } else {
+      alert('Error: ' + (json && json.data && json.data.message ? json.data.message : 'Could not save card'));
+    }
+  }).withFailureHandler(function(err){
+    btn.disabled = false; btn.textContent = 'Save Card';
+    alert('Server error: ' + (err && err.message ? err.message : err));
+  }).addCreditCard(params);
+}
+
 
   async function handleAddBill(e){
     e.preventDefault();
