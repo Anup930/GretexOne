@@ -1,5 +1,3 @@
-<!-- V 01.0 -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,18 +6,27 @@
   <title>Gretex One - Credit Card</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Use <link> for Google Fonts (more reliable than @import) -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
 
   <style>
-    /* Quick visual test: change to hotpink to confirm CSS is loading during debugging */
+    :root {
+      --purple-1: #3a3f9d;
+      --purple-2: #5b6fe0;
+      --card-bg: #fdfdff;
+      --shadow-light: 0 4px 12px rgba(0,0,0,0.05);
+      --shadow-med: 0 6px 18px rgba(0,0,0,0.06);
+    }
+    
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    
     body {
       font-family: 'Poppins', sans-serif;
-      background: #f0f4f8; /* change to hotpink to test */
+      background: #f0f4f8;
       padding: 40px;
       color: #333;
     }
+    
     .back-link {
       font-size: 1rem;
       text-decoration: none;
@@ -29,15 +36,241 @@
       display: inline-block;
     }
     .back-link:hover { text-decoration: underline; }
+    
     .app-content {
-      background: #fff;
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-      max-width: 900px;
+      background: transparent; /* No background, just a container */
+      padding: 0;
+      max-width: 1200px;
+      margin: 0 auto;
     }
-    h1 { margin-bottom: 12px; font-size: 1.6rem; }
-    p  { color: #555; line-height: 1.5; }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+    
+    .dashboard-header h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(90deg, var(--purple-2), var(--purple-1));
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 15px;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(59, 67, 156, 0.2);
+      transition: all 0.2s;
+    }
+    .btn-primary:hover {
+      box-shadow: 0 8px 20px rgba(59, 67, 156, 0.3);
+      transform: translateY(-2px);
+    }
+    
+    #card-dashboard {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    .loading-spinner {
+      text-align: center;
+      padding: 50px;
+      font-size: 1.2rem;
+      color: #555;
+    }
+    
+    /* --- Card Module --- */
+    .card-module {
+      background: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: var(--shadow-med);
+      overflow: hidden;
+    }
+    
+    .card-module-header {
+      padding: 24px 32px;
+      background: linear-gradient(135deg, #fafbff, #f8f9ff);
+      border-bottom: 1px solid #e9eef2;
+    }
+    
+    .credit-card-visual {
+      width: 300px;
+      height: 180px;
+      background: linear-gradient(135deg, #4c5bd6, #384090);
+      border-radius: 12px;
+      padding: 20px;
+      color: #fff;
+      box-shadow: 0 10px 30px rgba(50, 60, 140, 0.3);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .card-issuer { font-size: 1.2rem; font-weight: 600; }
+    .card-number { font-size: 1.1rem; letter-spacing: 2px; font-family: monospace; margin-top: auto; }
+    .card-name { font-size: 0.9rem; font-weight: 500; text-transform: uppercase; }
+
+    .card-module-body {
+      padding: 24px 32px;
+    }
+    
+    .bill-section { margin-bottom: 24px; }
+    .bill-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .bill-section-header h3 { font-size: 1.2rem; font-weight: 600; }
+    
+    .btn-secondary {
+      background: #eef2f7;
+      color: #333;
+      border: 1px solid #d8e0e7;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 500;
+      font-size: 14px;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover { background: #e4e9ef; }
+    
+    .btn-paid {
+      background: #e0f2f1;
+      color: #00695c;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 13px;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-paid:hover { background: #c8e6c9; }
+    
+    .bill-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .bill-table th, .bill-table td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid #eef2f7;
+    }
+    .bill-table th {
+      font-size: 13px;
+      font-weight: 600;
+      color: #555;
+      text-transform: uppercase;
+    }
+    .bill-table td { color: #222; }
+    .bill-table tr:last-child td { border-bottom: none; }
+    .bill-table .amount { font-weight: 600; color: #c62828; }
+    .bill-table .paid-amount { font-weight: 600; color: #2e7d32; }
+
+    .no-bills-message {
+      padding: 20px;
+      text-align: center;
+      color: #777;
+      background: #f9f9f9;
+      border-radius: 8px;
+    }
+    
+    /* --- Modal Styles --- */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    .modal-overlay.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .modal-content {
+      background: #fff;
+      border-radius: 12px;
+      padding: 32px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+    }
+    .modal-overlay.visible .modal-content {
+      transform: translateY(0);
+    }
+    
+    .modal-content h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #444;
+    }
+    .form-group input[type="text"],
+    .form-group input[type="number"],
+    .form-group input[type="date"],
+    .form-group input[type="file"] {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 8px;
+      border: 1px solid #d8e0e7;
+      font-size: 15px;
+      font-family: 'Poppins', sans-serif;
+      background: #fdfdff;
+    }
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--purple-2);
+      box-shadow: 0 0 0 3px rgba(91, 111, 224, 0.2);
+    }
+    
+    .form-group .file-upload-wrapper {
+      position: relative;
+    }
+    .form-group .file-name {
+      font-size: 13px;
+      color: #555;
+      margin-top: 8px;
+      font-style: italic;
+    }
+    
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    
   </style>
 </head>
 <body>
@@ -45,18 +278,532 @@
   <a href="App_access.html" class="back-link">← Back to Home</a>
 
   <div class="app-content">
-    <h1>💳 Credit Card App</h1>
-    <p>This is the page for the Credit Card PDF processor.</p>
+    
+    <div class="dashboard-header">
+      <h1>Credit Card Management</h1>
+      <button class="btn-primary" id="add-new-card-btn">
+        <span class="material-icons-outlined" style="font-size: 1.2rem; vertical-align: middle; margin-right: 4px;">add_card</span>
+        Add New Card
+      </button>
+    </div>
+    
+    <div id="card-dashboard">
+      <div id="loading-spinner" class="loading-spinner">Loading your card dashboard...</div>
+    </div>
+    
   </div>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const userString = sessionStorage.getItem("gretexUser");
-      if (!userString) {
-        // redirect to login if not signed in
-        window.location.href = "index.html";
+  <div class="modal-overlay" id="add-card-modal">
+    <div class="modal-content">
+      <h2>Add New Credit Card</h2>
+      <form id="add-card-form">
+        <div class="form-group">
+          <label for="card-issuer">Card Issuer (e.g., HDFC Bank)</label>
+          <input type="text" id="card-issuer" required>
+        </div>
+        <div class="form-group">
+          <label for="card-last-4">Last 4 Digits</label>
+          <input type="text" id="card-last-4" pattern="\d{4}" title="Please enter 4 digits" maxlength="4" required>
+        </div>
+        <div class="form-group">
+          <label for="card-name">Name on Card</label>
+          <input type="text" id="card-name" required>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" data-close="add-card-modal">Cancel</button>
+          <button type="submit" class="btn-primary" id="save-card-btn">Save Card</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="add-bill-modal">
+    <div class="modal-content">
+      <h2>Add New Bill</h2>
+      <form id="add-bill-form">
+        <input type="hidden" id="bill-card-id">
+        <div class="form-group">
+          <label for="bill-number">Bill Number</label>
+          <input type="text" id="bill-number" required>
+        </div>
+        <div class="form-group">
+          <label for="bill-date">Bill Date</label>
+          <input type="date" id="bill-date" required>
+        </div>
+        <div class="form-group">
+          <label for="bill-due-date">Due Date</label>
+          <input type="date" id="bill-due-date" required>
+        </div>
+        <div class="form-group">
+          <label for="bill-amount">Amount</label>
+          <input type="number" id="bill-amount" step="0.01" required>
+        </div>
+        <div class="form-group">
+          <label for="bill-attachment">Bill Attachment (PDF/Image)</label>
+          <input type="file" id="bill-attachment" accept=".pdf,image/*">
+          <div class="file-name" id="bill-attachment-name">No file selected.</div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" data-close="add-bill-modal">Cancel</button>
+          <button type="submit" class="btn-primary" id="save-bill-btn">Save Bill</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="add-payment-modal">
+    <div class="modal-content">
+      <h2>Mark Bill as Paid</h2>
+      <form id="add-payment-form">
+        <input type="hidden" id="payment-bill-id">
+        <div class="form-group">
+          <label for="payment-txn-no">Transaction No.</label>
+          <input type="text" id="payment-txn-no" required>
+        </div>
+        <div class="form-group">
+          <label for="payment-date">Pay Date</label>
+          <input type="date" id="payment-date" required>
+        </div>
+        <div class="form-group">
+          <label for="payment-amount">Pay Amount</label>
+          <input type="number" id="payment-amount" step="0.01" required>
+        </div>
+        <div class="form-group">
+          <label for="payment-attachment">Payment Attachment (Optional)</label>
+          <input type="file" id="payment-attachment" accept=".pdf,image/*">
+          <div class="file-name" id="payment-attachment-name">No file selected.</div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" data-close="add-payment-modal">Cancel</button>
+          <button type="submit" class="btn-primary" id="save-payment-btn">Save Payment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<script>
+  // =================================================================
+  // SCRIPT
+  // =================================================================
+  
+  // !!! IMPORTANT: Get this from index.html or set it manually
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzJ509n_LiOwk6OUDckqIpsrH8tQWIZacpR5tpB1XYjRv6UjKAZYx2roFN8Q1clZd8Dqw/exec";
+  
+  let currentUser = null;
+  let allCardData = []; // Local cache for data
+
+  document.addEventListener("DOMContentLoaded", function() {
+    const userString = sessionStorage.getItem("gretexUser");
+    if (!userString) {
+      window.location.href = "index.html";
+      return;
+    }
+    currentUser = JSON.parse(userString);
+    
+    // Initial load
+    loadDashboard();
+    
+    // --- Modal Event Listeners ---
+    const addCardBtn = document.getElementById('add-new-card-btn');
+    addCardBtn.addEventListener('click', () => showModal('add-card-modal'));
+    
+    document.querySelectorAll('[data-close]').forEach(btn => {
+      btn.addEventListener('click', () => closeModal(btn.dataset.close));
+    });
+    
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+          closeModal(overlay.id);
+        }
+      });
+    });
+
+    // --- Form Submission Handlers ---
+    document.getElementById('add-card-form').addEventListener('submit', handleAddCard);
+    document.getElementById('add-bill-form').addEventListener('submit', handleAddBill);
+    document.getElementById('add-payment-form').addEventListener('submit', handleAddPayment);
+    
+    // --- Dynamic Button Clicks (Event Delegation) ---
+    document.getElementById('card-dashboard').addEventListener('click', (e) => {
+      if (e.target.classList.contains('btn-add-bill')) {
+        const cardId = e.target.dataset.cardId;
+        document.getElementById('bill-card-id').value = cardId;
+        showModal('add-bill-modal');
+      }
+      
+      if (e.target.classList.contains('btn-mark-paid')) {
+        const billId = e.target.dataset.billId;
+        const billAmount = e.target.dataset.billAmount;
+        document.getElementById('payment-bill-id').value = billId;
+        // Pre-fill payment amount from bill amount
+        document.getElementById('payment-amount').value = billAmount;
+        showModal('add-payment-modal');
       }
     });
-  </script>
+    
+    // --- File Input Name Display ---
+    document.getElementById('bill-attachment').addEventListener('change', (e) => {
+      const fileName = e.target.files.length > 0 ? e.target.files[0].name : 'No file selected.';
+      document.getElementById('bill-attachment-name').textContent = fileName;
+    });
+    
+    document.getElementById('payment-attachment').addEventListener('change', (e) => {
+      const fileName = e.target.files.length > 0 ? e.target.files[0].name : 'No file selected.';
+      document.getElementById('payment-attachment-name').textContent = fileName;
+    });
+  });
+
+  // =================================================================
+  // MODAL FUNCTIONS
+  // =================================================================
+  
+  function showModal(modalId) {
+    document.getElementById(modalId).classList.add('visible');
+  }
+  
+  function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    modal.classList.remove('visible');
+    // Reset forms inside the modal
+    const form = modal.querySelector('form');
+    if (form) {
+      form.reset();
+    }
+    // Reset file name displays
+    document.getElementById('bill-attachment-name').textContent = 'No file selected.';
+    document.getElementById('payment-attachment-name').textContent = 'No file selected.';
+  }
+
+  // =================================================================
+  // DATA LOADING & RENDERING
+  // =================================================================
+  
+  /**
+   * Fetches all card and bill data for the current user
+   */
+  async function loadDashboard() {
+    showLoading(true);
+    
+    const payload = {
+      action: "getCreditCardDashboard",
+      params: { 
+        // We assume the user object has a unique ID. 
+        // Since login only returns 'name', we'll use 'name' as the unique ID for now.
+        // A better solution would be to return a 'userId' from the login.
+        userName: currentUser.name 
+      }
+    };
+    
+    try {
+      const res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+      const json = await res.json();
+      
+      if (json.status === "success") {
+        allCardData = json.data; // e.g., [{id: "c1", issuer: "HDFC", ..., bills: [...]}, ...]
+        renderDashboard(allCardData);
+      } else {
+        showError(json.data?.message || "Could not load data.");
+      }
+    } catch (err) {
+      showError("Network error: " + err.message);
+    } finally {
+      showLoading(false);
+    }
+  }
+  
+  /**
+   * Renders the entire dashboard from the data
+   */
+  function renderDashboard(cards) {
+    const dashboard = document.getElementById('card-dashboard');
+    dashboard.innerHTML = ''; // Clear existing content
+    
+    if (!cards || cards.length === 0) {
+      dashboard.innerHTML = `<div class="no-bills-message" style="background:var(--card-bg); padding: 30px; font-size: 1rem;">
+        No credit cards found. Click 'Add New Card' to get started.
+      </div>`;
+      return;
+    }
+    
+    cards.forEach(card => {
+      dashboard.appendChild(createCardModule(card));
+    });
+  }
+  
+  /**
+   * Creates a single <div class="card-module">...</div> element
+   */
+  function createCardModule(card) {
+    const module = document.createElement('div');
+    module.className = 'card-module';
+    
+    // Separate bills into pending and paid
+    const pendingBills = card.bills.filter(b => b.status === 'Pending');
+    const paidBills = card.bills.filter(b => b.status === 'Paid');
+    
+    module.innerHTML = `
+      <div class="card-module-header">
+        <div class="credit-card-visual">
+          <div class="card-issuer">${card.issuer}</div>
+          <div class="card-number">•••• ${card.last4}</div>
+          <div class="card-name">${card.nameOnCard}</div>
+        </div>
+      </div>
+      
+      <div class="card-module-body">
+        <div class="bill-section">
+          <div class="bill-section-header">
+            <h3>Pending Bills</h3>
+            <button class="btn-secondary btn-add-bill" data-card-id="${card.id}">
+              <span class="material-icons-outlined" style="font-size: 1.1rem; vertical-align: bottom; margin-right: 4px;">add</span>
+              Add Bill
+            </button>
+          </div>
+          ${renderBillTable(pendingBills, 'pending')}
+        </div>
+        
+        <div class="bill-section">
+          <div class="bill-section-header">
+            <h3>Paid Bills</h3>
+          </div>
+          ${renderBillTable(paidBills, 'paid')}
+        </div>
+      </div>
+    `;
+    return module;
+  }
+  
+  /**
+   * Generates the HTML for a bill table (pending or paid)
+   */
+  function renderBillTable(bills, type) {
+    if (bills.length === 0) {
+      return `<div class="no-bills-message">No ${type} bills.</div>`;
+    }
+    
+    let headers;
+    if (type === 'pending') {
+      headers = `<th>Bill #</th><th>Bill Date</th><th>Due Date</th><th>Amount</th><th>Actions</th>`;
+    } else {
+      headers = `<th>Bill #</th><th>Bill Date</th><th>Pay Date</th><th>Amount</th><th>Txn #</th>`;
+    }
+    
+    const rows = bills.map(bill => {
+      if (type === 'pending') {
+        return `
+          <tr>
+            <td>${bill.billNumber}</td>
+            <td>${bill.billDate}</td>
+            <td>${bill.dueDate}</td>
+            <td class="amount">₹${bill.amount.toFixed(2)}</td>
+            <td>
+              <button class="btn-paid btn-mark-paid" data-bill-id="${bill.id}" data-bill-amount="${bill.amount}">
+                Mark as Paid
+              </button>
+            </td>
+          </tr>
+        `;
+      } else {
+        return `
+          <tr>
+            <td>${bill.billNumber}</td>
+            <td>${bill.billDate}</td>
+            <td>${bill.payDate}</td>
+            <td class="paid-amount">₹${bill.payAmount.toFixed(2)}</td>
+            <td>${bill.txnNo}</td>
+          </tr>
+        `;
+      }
+    }).join('');
+    
+    return `
+      <table class="bill-table">
+        <thead><tr>${headers}</tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    `;
+  }
+  
+  function showLoading(isLoading) {
+    const spinner = document.getElementById('loading-spinner');
+    if (spinner) {
+      spinner.style.display = isLoading ? 'block' : 'none';
+    }
+  }
+  
+  function showError(message) {
+    // You could replace this with a prettier modal
+    alert("Error: " + message);
+    const dashboard = document.getElementById('card-dashboard');
+    dashboard.innerHTML = `<div class="no-bills-message" style="background:#fff8f8; color: #c00;">${message}</div>`;
+  }
+
+  // =================================================================
+  // FORM HANDLERS (Sending data)
+  // =================================================================
+
+  async function handleAddCard(e) {
+    e.preventDefault();
+    const btn = document.getElementById('save-card-btn');
+    btn.disabled = true;
+    btn.textContent = "Saving...";
+    
+    const payload = {
+      action: "addCreditCard",
+      params: {
+        issuer: document.getElementById('card-issuer').value,
+        last4: document.getElementById('card-last-4').value,
+        nameOnCard: document.getElementById('card-name').value,
+        addedBy: currentUser.name // Send who added it
+      }
+    };
+    
+    try {
+      const res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+      const json = await res.json();
+      
+      if (json.status === "success") {
+        closeModal('add-card-modal');
+        loadDashboard(); // Refresh the whole dashboard
+      } else {
+        alert("Error: " + (json.data?.message || "Could not save card."));
+      }
+    } catch (err) {
+      alert("Network Error: " + err.message);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Save Card";
+    }
+  }
+  
+  async function handleAddBill(e) {
+    e.preventDefault();
+    const btn = document.getElementById('save-bill-btn');
+    btn.disabled = true;
+    btn.textContent = "Saving...";
+    
+    const fileInput = document.getElementById('bill-attachment');
+    let attachmentData = null;
+    if (fileInput.files.length > 0) {
+      const file = fileInput.files[0];
+      attachmentData = {
+        filename: file.name,
+        mimeType: file.type,
+        data: await fileToBase64(file) // Convert file to Base64
+      };
+    }
+    
+    const payload = {
+      action: "addBill",
+      params: {
+        cardId: document.getElementById('bill-card-id').value,
+        billNumber: document.getElementById('bill-number').value,
+        billDate: document.getElementById('bill-date').value,
+        dueDate: document.getElementById('bill-due-date').value,
+        amount: parseFloat(document.getElementById('bill-amount').value),
+        addedBy: currentUser.name,
+        attachment: attachmentData
+      }
+    };
+    
+    try {
+      const res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+      const json = await res.json();
+      
+      if (json.status === "success") {
+        closeModal('add-bill-modal');
+        loadDashboard(); // Refresh
+      } else {
+        alert("Error: " + (json.data?.message || "Could not save bill."));
+      }
+    } catch (err) {
+      alert("Network Error: " + err.message);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Save Bill";
+    }
+  }
+  
+  async function handleAddPayment(e) {
+    e.preventDefault();
+    const btn = document.getElementById('save-payment-btn');
+    btn.disabled = true;
+    btn.textContent = "Saving...";
+    
+    const fileInput = document.getElementById('payment-attachment');
+    let attachmentData = null;
+    if (fileInput.files.length > 0) {
+      const file = fileInput.files[0];
+      attachmentData = {
+        filename: file.name,
+        mimeType: file.type,
+        data: await fileToBase64(file) // Convert file to Base64
+      };
+    }
+    
+    const payload = {
+      action: "markBillPaid",
+      params: {
+        billId: document.getElementById('payment-bill-id').value,
+        txnNo: document.getElementById('payment-txn-no').value,
+        payDate: document.getElementById('payment-date').value,
+        payAmount: parseFloat(document.getElementById('payment-amount').value),
+        paidBy: currentUser.name,
+        attachment: attachmentData
+      }
+    };
+    
+    try {
+      const res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+      const json = await res.json();
+      
+      if (json.status === "success") {
+        closeModal('add-payment-modal');
+        loadDashboard(); // Refresh
+      } else {
+        alert("Error: " + (json.data?.message || "Could not save payment."));
+      }
+    } catch (err) {
+      alert("Network Error: " + err.message);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Save Payment";
+    }
+  }
+  
+  /**
+   * Helper function to convert a file to a Base64 string
+   */
+  function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        // Remove the "data:mime/type;base64," prefix
+        const base64String = reader.result.split(',')[1];
+        resolve(base64String);
+      };
+      reader.onerror = error => reject(error);
+    });
+  }
+  
+</script>
 </body>
 </html>
