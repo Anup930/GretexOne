@@ -488,9 +488,6 @@
     const payload = {
       action: "getCreditCardDashboard",
       params: { 
-        // We assume the user object has a unique ID. 
-        // Since login only returns 'name', we'll use 'name' as the unique ID for now.
-        // A better solution would be to return a 'userId' from the login.
         userName: currentUser.name 
       }
     };
