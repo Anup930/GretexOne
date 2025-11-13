@@ -1,226 +1,238 @@
-<!-- V 01.0 -->
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Gretex One - Login</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --purple-1: #3a3f9d;
-    --purple-2: #5b6fe0;
-    --accent: linear-gradient(90deg,#2f66ff,#7c4dff);
-    --card-bg: linear-gradient(180deg, rgba(255,255,255,0.88), rgba(245,249,255,0.88));
-    --soft-shadow: 0 18px 40px rgba(19,35,85,0.16);
-    --inner-shadow: 0 8px 30px rgba(55,65,120,0.12);
-  }
+  <meta charset="utf-8" />
+  <base target="_top">
+  <title>Gretex One - Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%}
-  body{
-    font-family:"Poppins",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
-    background: linear-gradient(135deg,#6673ff22,#3f7bff22); /* subtle */
-    min-height:100vh;
-    color:#1c2533;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:28px;
-  }
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-  /* Top red notice bar (like screenshot) */
-  .notice {
-    position:fixed;
-    left:0; right:0;
-    top:0;
-    background:#d32f2f;
-    color:#fff;
-    padding:10px 16px;
-    font-weight:600;
-    z-index:30;
-    text-align:right;
-    box-shadow:0 2px 6px rgba(0,0,0,0.08);
-  }
+  <style>
+    :root{
+      --purple-1: #3a3f9d;
+      --purple-2: #5b6fe0;
+      --accent: linear-gradient(90deg,#2f66ff,#7c4dff);
+      --card-bg: linear-gradient(180deg, rgba(255,255,255,0.88), rgba(245,249,255,0.88));
+      --soft-shadow: 0 18px 40px rgba(19,35,85,0.16);
+      --inner-shadow: 0 8px 30px rgba(55,65,120,0.12);
+    }
 
-  /* Outer rounded board (large pill-like background) */
-  .wrap {
-    width: min(1200px, 96%);
-    background: linear-gradient(90deg,#5b6fe0,#3a3f9d);
-    border-radius:28px;
-    padding:28px;
-    position:relative;
-    overflow:visible;
-    box-shadow: var(--soft-shadow);
-  }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family:"Poppins",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+      background: linear-gradient(135deg,#6673ff22,#3f7bff22);
+      min-height:100vh;
+      color:#1c2533;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:28px;
+    }
 
-  /* Big inner panel that creates the left dark area and right pale card */
-  .panel {
-    display:flex;
-    align-items:stretch;
-    gap:0;
-    border-radius:18px;
-    overflow:visible;
-    background:transparent;
-    min-height:520px;
-  }
+    /* 🔴 MOVING RED NOTICE BAR */
+    .notice {
+      position:fixed;
+      left:0; right:0;
+      top:0;
+      height:42px;
+      background:#d32f2f;
+      color:#fff;
+      z-index:9999;
+      display:flex;
+      align-items:center;
+      overflow:hidden;
+      box-shadow:0 2px 6px rgba(0,0,0,0.08);
+      padding:0 8px;
+      font-weight:600;
+      font-size:14px;
+    }
 
-  /* The purple left block */
-  .left {
-    width:48%;
-    min-width:350px;
-    background: linear-gradient(135deg, rgba(10,19,85,0.08), rgba(7,9,51,0.18)), linear-gradient(135deg,#384090,#4c5bd6);
-    color:white;
-    padding:56px 48px;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    border-radius:18px 0 0 18px;
-    position:relative;
-    box-shadow: inset 0 -40px 80px rgba(0,0,0,0.06);
-  }
-  /* subtle larger rounded corner behind right card (to mimic screenshot) */
-  .left::after{
-    content:"";
-    position:absolute;
-    right:-40px;
-    top:20%;
-    width:80px;
-    height:80%;
-    background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-    border-radius: 0 40px 40px 0;
-    pointer-events:none;
-  }
+    .notice-track {
+      display:flex;
+      gap:48px;
+      white-space:nowrap;
+      will-change:transform;
+      animation: scroll-notice 16s linear infinite;
+    }
 
-  .logo {
-    width:120px;
-    height:120px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    margin-bottom:18px;
-  }
-  .brand-title{
-    font-size:48px;
-    font-weight:700;
-    margin:18px 0 8px;
-    letter-spacing:0.5px;
-  }
-  .left p{
-    max-width:380px;
-    text-align:center;
-    color: rgba(255,255,255,0.88);
-    line-height:1.6;
-    font-size:15px;
-  }
+    .notice-item{
+      display:inline-block;
+    }
 
-  /* Right card that appears like floating card */
-  .right {
-    flex:1;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:44px;
-    position:relative;
-  }
+    @keyframes scroll-notice {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
 
-  .card {
-    width:100%;
-    max-width:420px;
-    background: var(--card-bg);
-    border-radius:18px;
-    padding:36px 34px;
-    box-shadow: var(--inner-shadow), 0 22px 46px rgba(32,44,80,0.08);
-    backdrop-filter: blur(6px);
-    position:relative;
-  }
+    .notice:hover .notice-track{
+      animation-play-state: paused;
+    }
 
-  .card h1{
-    font-size:28px;
-    margin-bottom:6px;
-    font-weight:700;
-    color:#22293a;
-  }
-  .card .sub { color:#6b758d; margin-bottom:18px; font-weight:500; font-size:14px }
 
-  label{
-    display:block;
-    font-size:13px;
-    color:#5c6678;
-    margin:12px 0 8px;
-    font-weight:600;
-  }
-  input[type="text"], input[type="password"]{
-    width:100%;
-    padding:12px 14px;
-    border-radius:10px;
-    border:1px solid #e3e7ef;
-    font-size:15px;
-    background:linear-gradient(180deg,#fff,#fbfdff);
-    transition:box-shadow .18s, border-color .18s;
-  }
-  input:focus{
-    outline:none;
-    box-shadow:0 6px 20px rgba(74,90,155,0.12);
-    border-color:#6570d8;
-  }
+    /* 📌 MAIN LAYOUT */
+    .wrap {
+      width: min(1200px, 96%);
+      background: linear-gradient(90deg,#5b6fe0,#3a3f9d);
+      border-radius:28px;
+      padding:28px;
+      margin-top:60px;
+      box-shadow: var(--soft-shadow);
+    }
 
-  .btn{
-    margin-top:18px;
-    width:100%;
-    padding:14px 18px;
-    border-radius:10px;
-    border:none;
-    cursor:pointer;
-    font-weight:700;
-    font-size:15px;
-    color:#fff;
-    background: linear-gradient(90deg,#2f66ff,#7c4dff);
-    box-shadow: 0 10px 30px rgba(60,70,150,0.18);
-  }
-  .forgot { display:block; text-align:center; margin-top:14px; color:#5b6f9a; font-size:13px; text-decoration:none }
-  .forgot:hover { text-decoration:underline }
+    .panel {
+      display:flex;
+      align-items:stretch;
+      border-radius:18px;
+    }
 
-  /* responsive tweaks */
-  @media (max-width:920px){
-    .panel{flex-direction:column}
-    .left{width:100%; border-radius:12px 12px 0 0; padding:34px}
-    .right{padding:26px}
-    .wrap{padding:18px}
-    .brand-title{font-size:34px}
-  }
-</style>
+    /* LEFT PANEL */
+    .left {
+      width:48%;
+      background: linear-gradient(135deg,#384090,#4c5bd6);
+      color:white;
+      padding:56px 48px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      border-radius:18px 0 0 18px;
+      box-shadow: inset 0 -40px 80px rgba(0,0,0,0.06);
+      position:relative;
+    }
+
+    .logo{
+      width:120px;
+      height:120px;
+      margin-bottom:18px;
+    }
+
+    .brand-title{
+      font-size:48px;
+      font-weight:700;
+      margin-bottom:12px;
+    }
+
+    .left p{
+      max-width:380px;
+      text-align:center;
+      color: rgba(255,255,255,0.88);
+      line-height:1.6;
+      font-size:15px;
+    }
+
+    /* RIGHT PANEL */
+    .right {
+      flex:1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:44px;
+    }
+
+    .card {
+      width:100%;
+      max-width:420px;
+      background: var(--card-bg);
+      border-radius:18px;
+      padding:36px 34px;
+      box-shadow: var(--inner-shadow), 0 22px 46px rgba(32,44,80,0.08);
+      backdrop-filter: blur(6px);
+    }
+
+    .card h1{
+      font-size:28px;
+      margin-bottom:6px;
+      font-weight:700;
+      color:#22293a;
+    }
+
+    .card .sub { color:#6b758d; margin-bottom:18px; font-weight:500; font-size:14px }
+
+    label{
+      display:block;
+      font-size:13px;
+      color:#5c6678;
+      margin:12px 0 8px;
+      font-weight:600;
+    }
+
+    input[type="text"], input[type="password"]{
+      width:100%;
+      padding:12px 14px;
+      border-radius:10px;
+      border:1px solid #e3e7ef;
+      font-size:15px;
+      background:linear-gradient(180deg,#fff,#fbfdff);
+    }
+
+    input:focus{
+      outline:none;
+      box-shadow:0 6px 20px rgba(74,90,155,0.12);
+      border-color:#6570d8;
+    }
+
+    .btn{
+      margin-top:18px;
+      width:100%;
+      padding:14px 18px;
+      border-radius:10px;
+      border:none;
+      cursor:pointer;
+      font-weight:700;
+      font-size:15px;
+      color:#fff;
+      background: linear-gradient(90deg,#2f66ff,#7c4dff);
+      box-shadow: 0 10px 30px rgba(60,70,150,0.18);
+    }
+
+    .forgot {
+      display:block;
+      text-align:center;
+      margin-top:14px;
+      color:#5b6f9a;
+      font-size:13px;
+      text-decoration:none
+    }
+
+    @media (max-width:920px){
+      .panel{flex-direction:column}
+      .left{width:100%; border-radius:12px 12px 0 0; padding:34px}
+      .right{padding:26px}
+    }
+  </style>
+
 </head>
-<body>
-  <div class="notice">Important Notice: Provisional payslip has been generated</div>
 
-  <div class="wrap" style="margin-top:36px;">
+<body>
+
+  <!-- 🔴 MOVING NOTICE BAR -->
+  <div class="notice">
+    <div class="notice-track">
+      <div class="notice-item">Important Notice: Provisional payslip has been generated</div>
+      <div class="notice-item">Important Notice: Provisional payslip has been generated</div>
+    </div>
+  </div>
+
+  <div class="wrap">
     <div class="panel">
+
+      <!-- LEFT PANEL -->
       <div class="left">
-        <div class="logo" aria-hidden="true">
-          <!-- simple globe/logo - replace with <img src="path/to/logo.png"> -->
-          <svg width="110" height="110" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="32" cy="32" r="30" fill="#2d6bff"/>
-            <path d="M8 36c8-6 20-6 36 0" stroke="#b6e3ff" stroke-width="2.2" stroke-linecap="round"/>
-            <path d="M11 22c10-6 30-6 40 0" stroke="#b6e3ff" stroke-width="2.2" stroke-linecap="round"/>
-          </svg>
-        </div>
+        <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Globe_icon.svg/1024px-Globe_icon.svg.png">
 
         <div class="brand-title">HR Hub</div>
-        <p>
-          A secure space to manage HR requests, tickets and approvals effortlessly.
-          Sign in to access your personalized dashboard.
-        </p>
+        <p>A secure space to manage HR requests, tickets and approvals effortlessly. Sign in to access your personalized dashboard.</p>
       </div>
 
+      <!-- RIGHT PANEL -->
       <div class="right">
-        <div class="card" role="region" aria-label="Login form">
-          <h1>Welcome Back <span style="font-size:20px">👋</span></h1>
+        <div class="card">
+          <h1>Welcome Back 👋</h1>
           <div class="sub">Help / Notes</div>
 
-          <form id="login-form" autocomplete="off">
+          <form id="login-form">
             <label for="userid">User ID</label>
             <input id="userid" type="text" name="userid" required>
 
@@ -235,22 +247,25 @@
           </form>
         </div>
       </div>
+
     </div>
   </div>
 
+
 <script>
-  // Example JS same as you had but simplified and integrated.
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzJ509n_LiOwk6OUDckqIpsrH8tQWIZacpR5tpB1XYjRv6UjKAZYx2roFN8Q1clZd8Dqw/exec";
+
   document.getElementById('login-form').addEventListener('submit', async function(e){
     e.preventDefault();
+
     const u = document.getElementById('userid').value.trim();
     const p = document.getElementById('password').value;
 
     const btn = document.querySelector('.btn');
     const msg = document.getElementById('message');
+
     msg.textContent = "Signing in...";
     btn.disabled = true;
-    btn.style.opacity = .8;
 
     const payload = { action: "userLogin", params: { userId: u, password: p } };
 
@@ -260,7 +275,9 @@
         headers:{ 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(payload)
       });
+
       const json = await res.json();
+
       if(json.status === "success"){
         sessionStorage.setItem('gretexUser', JSON.stringify(json.data));
         window.location.href = "App_access.html";
@@ -268,21 +285,19 @@
         msg.textContent = json.data?.message || "Invalid credentials";
         msg.style.color = "#d32f2f";
         btn.disabled = false;
-        btn.style.opacity = 1;
       }
-    } catch(err){
-      console.error(err);
-      msg.textContent = "Network error: " + (err.message || "Unable to reach server");
+    }
+    catch(err){
+      msg.textContent = "Network error: " + err.message;
       msg.style.color = "#d32f2f";
       btn.disabled = false;
-      btn.style.opacity = 1;
     }
   });
 
-  // Auto-redirect if already signed in
   if(sessionStorage.getItem("gretexUser")){
     window.location.href = "App_access.html";
   }
 </script>
+
 </body>
 </html>
