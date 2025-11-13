@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <title>Gretex One - Mobile Bills</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Styles copied from creditcard.html */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+    body { font-family: 'Poppins', sans-serif; background: #f0f4f8; padding: 40px; }
+    .back-link { font-size: 1rem; text-decoration: none; color: #4a5a9b; font-weight: 500; margin-bottom: 20px; display: inline-block; }
+    .app-content { background: #fff; padding: 40px; border-radius: 12px; }
+  </style>
+</head>
+<body>
+  
+  <a href="App_access.html" class="back-link">
+    &larr; Back to Home
+  </a>
+
+  <div class="app-content">
+    <h1>📱 Mobile Bills App</h1>
+    <p>This is the page for the Mobile Bills app.</p>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const userString = sessionStorage.getItem("gretexUser");
+      if (!userString) {
+        window.location.href = "index.html";
+      }
+    });
+  </script>
+</body>
+</html>
