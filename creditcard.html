@@ -1,50 +1,60 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <base target="_top">
+  <meta charset="utf-8" />
+  <base target="_top">
   <title>Gretex One - Credit Card</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: #f0f4f8;
-      padding: 40px;
-    }
-    .back-link {
-      font-size: 1rem;
-      text-decoration: none;
-      color: #4a5a9b;
-      font-weight: 500;
-      margin-bottom: 20px;
-      display: inline-block;
-    }
-    .app-content {
-      background: #fff;
-      padding: 40px;
-      border-radius: 12px;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Use <link> for Google Fonts (more reliable than @import) -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* Quick visual test: change to hotpink to confirm CSS is loading during debugging */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f0f4f8; /* change to hotpink to test */
+      padding: 40px;
+      color: #333;
+    }
+    .back-link {
+      font-size: 1rem;
+      text-decoration: none;
+      color: #4a5a9b;
+      font-weight: 500;
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+    .back-link:hover { text-decoration: underline; }
+    .app-content {
+      background: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+      max-width: 900px;
+    }
+    h1 { margin-bottom: 12px; font-size: 1.6rem; }
+    p  { color: #555; line-height: 1.5; }
+  </style>
 </head>
 <body>
-  
-    <a href="App_access.html" class="back-link">
-    &larr; Back to Home
-  </a>
 
-  <div class="app-content">
-    <h1>💳 Credit Card App</h1>
-    <p>This is the page for the Credit Card PDF processor.</p>
-  </div>
+  <a href="App_access.html" class="back-link">← Back to Home</a>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const userString = sessionStorage.getItem("gretexUser");
-      if (!userString) {
-        // ** NEW: Redirect to login file **
-        window.location.href = "index.html";
-      }
-    });
-  </script>
+  <div class="app-content">
+    <h1>💳 Credit Card App</h1>
+    <p>This is the page for the Credit Card PDF processor.</p>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const userString = sessionStorage.getItem("gretexUser");
+      if (!userString) {
+        // redirect to login if not signed in
+        window.location.href = "index.html";
+      }
+    });
+  </script>
 </body>
 </html>
