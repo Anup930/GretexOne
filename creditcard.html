@@ -1,4 +1,4 @@
-<!-- V 2.1.9 -->
+<!-- V 2.1.7 -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -137,19 +137,28 @@
       margin-top: 10px;
       padding-top: 10px;
       border-top: 1px solid rgba(255, 255, 255, 0.2);
-      /* MODIFIED: Changed to a 2x2 grid */
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 6px;
+      /* MODIFIED: Adjusted gap */
+      gap: 4px 8px; /* row column */
     }
+    
+    /* NEW: Rule to handle overflow */
+    .card-due-info > div {
+      overflow-wrap: break-word;
+      min-width: 0;
+    }
+    
     .card-due-info .due-label {
       font-weight: 300;
-      font-size: 0.8rem;
+      /* MODIFIED: Reduced font size */
+      font-size: 0.7rem; 
       color: rgba(255, 255, 255, 0.7);
     }
     .card-due-info .due-value {
       font-weight: 600;
-      font-size: 0.9rem;
+      /* MODIFIED: Reduced font size */
+      font-size: 0.8rem;
     }
 
     /* --- NEW: Color classes for card visual --- */
@@ -232,7 +241,6 @@
     .bill-table tr:last-child td { border-bottom: none; }
     .bill-table .amount { font-weight: 600; color: #c62828; }
     
-    /* MODIFIED: Added style for paid amounts in green */
     .bill-table .paid-amount { font-weight: 600; color: #2e7d32; }
 
     .bill-table a {
@@ -599,7 +607,7 @@
   }
 
   // =================================================================
-  // DATA LOADING & RENDERING (MODIFIED)
+  // DATA LOADING & RENDERING (No Changes to this section)
   // =================================================================
   
   async function loadDashboard() {
@@ -646,7 +654,6 @@
     
     let gridHtml = '';
     cards.forEach(card => {
-      // MODIFIED: This function now returns more data
       const summary = calculateCardSummary(card);
       gridHtml += createCardVisual(card, summary);
     });
@@ -654,7 +661,7 @@
   }
 
   /**
-    * MODIFIED: Calculates Total Due, Next Due, AND Last Payment
+    * (No Changes in this function logic)
     */
   function calculateCardSummary(card) {
     const pendingBills = card.bills.filter(b => b.status === 'Pending');
@@ -665,7 +672,6 @@
     let lastPayAmount = 0;
     let lastPayDate = "N/A";
 
-    // Calculate Total Due and Next Due
     if (pendingBills.length > 0) {
       totalDue = pendingBills.reduce((sum, bill) => sum + parseFloat(bill.amount), 0);
       
@@ -675,11 +681,9 @@
         .toISOString().split('T')[0];
     }
 
-    // Calculate Last Payment
     if (paidBills.length > 0) {
-      // Sort paid bills by payDate, most recent first
       const latestPaidBill = paidBills
-        .filter(b => b.payDate) // Ensure payDate exists
+        .filter(b => b.payDate)
         .sort((a, b) => new Date(b.payDate) - new Date(a.payDate))[0];
       
       if (latestPaidBill) {
@@ -692,25 +696,21 @@
   }
 
   /**
-    * MODIFIED: Creates the HTML for the card visual with new color-coding
+    * (No Changes in this function logic)
     */
   function createCardVisual(card, summary) {
     
     const isDue = summary.totalDue > 0;
     
-    // Total Due
     const dueAmountClass = isDue ? 'due-value-red' : 'due-value-neutral';
     const dueAmountString = `₹${summary.totalDue.toFixed(2)}`;
     
-    // Next Due
     const dueDateClass = isDue ? 'due-value-red' : 'due-value-neutral';
     const dueDateString = summary.earliestDueDate;
 
-    // Last Pay Amount
     const lastPayAmountClass = summary.lastPayAmount > 0 ? 'due-value-green' : 'due-value-neutral';
     const lastPayAmountString = `₹${summary.lastPayAmount.toFixed(2)}`;
     
-    // Last Pay Date
     const lastPayDateClass = summary.lastPayAmount > 0 ? 'due-value-green' : 'due-value-neutral';
     const lastPayDateString = summary.lastPayDate;
 
@@ -747,7 +747,7 @@
   }
 
   /**
-    * Renders the full detail view for a single card
+    * (No Changes in this function logic)
     */
   function renderCardDetail(cardId) {
     const card = allCardData.find(c => c.id === cardId);
@@ -761,12 +761,11 @@
   }
   
   /**
-    * Creates the *detail* module.
+    * (No Changes in this function logic)
     */
   function createCardDetailModule(card) {
     const allBills = card.bills;
     
-    // Get the SAME summary data for the card visual
     const summary = calculateCardSummary(card);
     const cardVisualHtml = createCardVisual(card, summary);
     
@@ -793,7 +792,7 @@
   }
   
   /**
-    * MODIFIED: Renders the bill table with color-coded amounts
+    * (No Changes in this function logic)
     */
   function renderBillTable(bills) {
     if (bills.length === 0) {
@@ -818,16 +817,14 @@
       
       let actionButton = '';
       
-      // --- MODIFIED: Determine amount class based on status ---
-      let amountClass = 'amount'; // Default to red (pending)
+      let amountClass = 'amount';
       
       if (bill.status === 'Pending') {
         actionButton = `<button class="btn-paid btn-mark-paid" data-bill-id="${bill.id}" data-bill-amount="${bill.amount}">
                           Mark as Paid
                         </button>`;
       } else { 
-        // Bill is 'Paid'
-        amountClass = 'paid-amount'; // Change class to green
+        amountClass = 'paid-amount';
         
         const paymentData = {
           billNumber: bill.billNumber,
@@ -1041,7 +1038,7 @@
   }
 
   // =================================================================
-  // --- NEW: FUNCTION TO OPEN PAYMENT DETAILS IN A NEW TAB ---
+  // --- (No Changes in this function) ---
   // =================================================================
 
   function openPaymentDetailsTab(data) {
