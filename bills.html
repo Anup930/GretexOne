@@ -1,4 +1,4 @@
-<!-- V 2.0.9 -->
+<!-- V 2.1.7 -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -31,7 +31,7 @@
       min-height: 100vh;
     }
 
-    /* --- Sidebar --- */
+    /* --- Sidebar (Unchanged) --- */
     .sidebar {
       flex-basis: 260px;
       flex-shrink: 0;
@@ -41,7 +41,6 @@
       flex-direction: column;
       padding: 25px 20px;
     }
-    
     .sidebar-header {
       text-align: left;
       margin-bottom: 30px;
@@ -49,12 +48,9 @@
       padding-left: 10px;
       border-bottom: 1px solid #e9eef2;
     }
-    
     .sidebar-header h2 { font-size: 1.4rem; font-weight: 600; color: #3b439c; }
     #user-name { font-size: 0.9rem; font-weight: 500; color: #555; margin-top: 8px; }
-    
     .nav-links { flex-grow: 1; list-style: none; margin: 0; padding: 0; }
-    
     .nav-links li a {
       display: flex;
       align-items: center;
@@ -67,24 +63,16 @@
       color: #4a5568;
       transition: all 0.2s ease-in-out;
     }
-    
-    .nav-links li a:hover {
-      background-color: #f4f7fa;
-      color: #3b439c;
-    }
-
+    .nav-links li a:hover { background-color: #f4f7fa; color: #3b439c; }
     .nav-links li a.active {
       background-color: #3b439c;
       color: #ffffff;
       font-weight: 600;
       box-shadow: 0 5px 15px -5px rgba(59, 67, 156, 0.4);
     }
-    
     .nav-links li a .material-icons { font-size: 22px; }
     .nav-links li a.active .material-icons { color: #ffffff; }
-
     .sidebar-footer { margin-top: 20px; }
-    
     #logout-button {
       width: 100%;
       padding: 14px 20px;
@@ -101,7 +89,6 @@
       gap: 12px;
       transition: background-color 0.2s;
     }
-    
     #logout-button:hover { background: #f8d7da; }
     #logout-button .material-icons-outlined { font-size: 22px; }
 
@@ -111,26 +98,19 @@
       padding: 40px;
       overflow-y: auto;
     }
-
     .app-content {
       background: transparent;
       padding: 0;
       max-width: 1400px;
       margin: 0 auto;
     }
-
     .dashboard-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 24px;
     }
-    
-    .dashboard-header h1 {
-      font-size: 1.8rem;
-      font-weight: 600;
-    }
-    
+    .dashboard-header h1 { font-size: 1.8rem; font-weight: 600; }
     .btn-primary {
       background: linear-gradient(90deg, var(--purple-2), var(--purple-1));
       color: #fff;
@@ -152,14 +132,34 @@
       transform: translateY(-2px);
     }
     
-    .loading-spinner {
-      text-align: center;
-      padding: 50px;
-      font-size: 1.2rem;
-      color: #555;
+    /* --- NEW: Filter Tabs --- */
+    .filter-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid #d8e0e7;
     }
-    
-    /* --- Bill Sections --- */
+    .filter-tabs button {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #555;
+      background: transparent;
+      border: none;
+      padding: 12px 20px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s ease;
+    }
+    .filter-tabs button:hover {
+      background: #f4f7fa;
+    }
+    .filter-tabs button.active {
+      color: var(--purple-1);
+      border-bottom-color: var(--purple-1);
+    }
+
+    /* --- MODIFIED: Single Bill Section --- */
     .bill-section {
       background: var(--card-bg);
       border-radius: 16px;
@@ -167,24 +167,19 @@
       overflow: hidden;
       margin-bottom: 32px;
     }
-    
-    .bill-section-header {
-      padding: 20px 32px;
-      border-bottom: 1px solid #e9eef2;
-    }
-    .bill-section-header h2 {
-      font-size: 1.3rem;
-      font-weight: 600;
-    }
-    /* Section-specific header colors */
-    #due-bills-header { background: linear-gradient(135deg, #fff8f8, #fffafb); color: #c62828; }
-    #shortpay-bills-header { background: linear-gradient(135deg, #fffaf3, #fffcf7); color: #f57f17; }
-    #paid-bills-header { background: linear-gradient(135deg, #f8fff9, #fafffa); color: #2e7d32; }
-
     .bill-section-body {
       padding: 0; /* Table will fill */
     }
-
+    
+    /* --- (Removed duplicate btn-primary) --- */
+    
+    .loading-spinner {
+      text-align: center;
+      padding: 50px;
+      font-size: 1.2rem;
+      color: #555;
+    }
+    
     .btn-secondary {
       background: #eef2f7;
       color: #333;
@@ -238,16 +233,12 @@
     .bill-table .amount { font-weight: 600; color: #c62828; }
     .bill-table .shortpay-amount { font-weight: 600; color: #f57f17; }
     .bill-table .paid-amount { font-weight: 600; color: #2e7d32; }
-
     .bill-table a {
       color: #3a3f9d;
       font-weight: 500;
       text-decoration: none;
     }
-    .bill-table a:hover {
-      text-decoration: underline;
-    }
-
+    .bill-table a:hover { text-decoration: underline; }
     .no-bills-message {
       padding: 32px;
       text-align: center;
@@ -255,7 +246,7 @@
       font-size: 1rem;
     }
     
-    /* --- Modal Styles --- */
+    /* --- Modal Styles (Unchanged) --- */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -269,11 +260,7 @@
       visibility: hidden;
       transition: all 0.3s ease;
     }
-    .modal-overlay.visible {
-      opacity: 1;
-      visibility: visible;
-    }
-    
+    .modal-overlay.visible { opacity: 1; visibility: visible; }
     .modal-content {
       background: #fff;
       border-radius: 12px;
@@ -284,19 +271,13 @@
       transform: translateY(20px);
       transition: all 0.3s ease;
     }
-    .modal-overlay.visible .modal-content {
-      transform: translateY(0);
-    }
-    
+    .modal-overlay.visible .modal-content { transform: translateY(0); }
     .modal-content h2 {
       font-size: 1.5rem;
       font-weight: 600;
       margin-bottom: 20px;
     }
-    
-    .form-group {
-      margin-bottom: 16px;
-    }
+    .form-group { margin-bottom: 16px; }
     .form-group label {
       display: block;
       font-size: 14px;
@@ -323,14 +304,12 @@
       border-color: var(--purple-2);
       box-shadow: 0 0 0 3px rgba(91, 111, 224, 0.2);
     }
-    
     .form-group .file-name {
       font-size: 13px;
       color: #555;
       margin-top: 8px;
       font-style: italic;
     }
-    
     .modal-actions {
       display: flex;
       justify-content: flex-end;
@@ -347,10 +326,7 @@
       <h2>Gretex One</h2>
       <div id="user-name">Loading...</div>
     </div>
-  
-    <ul id="nav-links-list" class="nav-links">
-      </ul>
-  
+    <ul id="nav-links-list" class="nav-links"></ul>
     <div class="sidebar-footer">
       <button id="logout-button">
         <span class="material-icons-outlined">logout</span>
@@ -371,46 +347,31 @@
         </button>
       </div>
 
-      <div id="loading-spinner" class="loading-spinner">Loading your bills...</div>
-      
-      <div class="bill-section" id="due-bills-section" style="display:none;">
-        <div class="bill-section-header" id="due-bills-header">
-          <h2>Due Bills</h2>
-        </div>
-        <div class="bill-section-body" id="due-bills-container">
-          </div>
+      <div class="filter-tabs" id="filter-tabs-container">
+        <button data-filter="due" class="active">Due Bills</button>
+        <button data-filter="shortpay">Part Pay</button>
+        <button data-filter="paid">Paid</button>
+        <button data-filter="new">New Bills (Last 2 Days)</button>
       </div>
 
-      <div class="bill-section" id="shortpay-bills-section" style="display:none;">
-        <div class="bill-section-header" id="shortpay-bills-header">
-          <h2>Shortpay Bills</h2>
-        </div>
-        <div class="bill-section-body" id="shortpay-bills-container">
-          </div>
-      </div>
-
-      <div class="bill-section" id="paid-bills-section" style="display:none;">
-        <div class="bill-section-header" id="paid-bills-header">
-          <h2>Paid Bills</h2>
-        </div>
-        <div class="bill-section-body" id="paid-bills-container">
+      <div class="bill-section" id="bill-display-section">
+        <div class="bill-section-body" id="bill-container">
+          <div id="loading-spinner" class="loading-spinner">Loading your bills...</div>
           </div>
       </div>
       
-    </div>
+      </div>
 
   </div> <div class="modal-overlay" id="add-bill-modal">
     <div class="modal-content">
       <h2>Add New Bill</h2>
       <form id="add-bill-form">
-        
         <div class="form-group">
           <label for="bill-card-id-select">Credit Card</label>
           <select id="bill-card-id-select" required>
             <option value="">Loading cards...</option>
           </select>
         </div>
-
         <div class="form-group">
           <label for="bill-number">Bill Number</label>
           <input type="text" id="bill-number" required>
@@ -478,10 +439,12 @@
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyH5kOEdJGlPgx4sMH3vEqkixalf3X6PACttZHMLWh8M-TtLT2OUN5U_XRMGP-VWAfW/exec";
   
   let currentUser = null;
-  let allCardData = []; 
+  let allCardData = []; // Cache for card data
+  let allBills = []; // --- NEW: Flattened list of all bills
+  let currentFilter = 'due'; // --- NEW: Default filter
 
-  let loadingSpinner, dueBillsContainer, shortpayBillsContainer, paidBillsContainer;
-  let dueSection, shortpaySection, paidSection;
+  // --- MODIFIED: Element variables
+  let loadingSpinner, billContainer, filterTabsContainer;
 
   document.addEventListener("DOMContentLoaded", function() {
     const userString = sessionStorage.getItem("gretexUser");
@@ -491,34 +454,27 @@
     }
     currentUser = JSON.parse(userString);
     
-    // --- Sidebar Population Logic ---
+    // --- Sidebar Population Logic (Unchanged) ---
     document.getElementById("user-name").innerText = (currentUser && currentUser.name) ? currentUser.name : "User";
-    
     const appMap = {
       "App1_CreditCard": { name: "Credit Card", page: "creditcard", icon: "credit_card" },
       "App2_Bills": { name: "Bills", page: "bills", icon: "receipt_long" },
       "App3_MobileBills": { name: "Mobile Bills", page: "mobilebills", icon: "phone_android" }
     };
-    
     const navLinksList = document.getElementById("nav-links-list");
     const homeLink = document.createElement("li");
     homeLink.innerHTML = `<a href="App_access.html"><span class="material-icons">home</span> Home</a>`;
     navLinksList.appendChild(homeLink);
-
     if (currentUser.apps && currentUser.apps.length > 0) {
       currentUser.apps.forEach(appKey => {
         const app = appMap[appKey];
         if (!app) return; 
-
-        // Set "Bills" as active
         const isActive = (app.page === 'bills') ? 'active' : '';
-
         const navLink = document.createElement("li");
         navLink.innerHTML = `<a href="${app.page}.html" class="${isActive}"><span class="material-icons">${app.icon}</span> ${app.name}</a>`;
         navLinksList.appendChild(navLink);
       });
     }
-
     document.getElementById("logout-button").addEventListener("click", function() {
       sessionStorage.removeItem("gretexUser");
       window.location.href = "index.html";
@@ -526,61 +482,59 @@
     // --- End of Sidebar Logic ---
 
     
-    // --- Get Page Elements ---
+    // --- MODIFIED: Get Page Elements ---
     loadingSpinner = document.getElementById('loading-spinner');
-    dueBillsContainer = document.getElementById('due-bills-container');
-    shortpayBillsContainer = document.getElementById('shortpay-bills-container');
-    paidBillsContainer = document.getElementById('paid-bills-container');
-    
-    dueSection = document.getElementById('due-bills-section');
-    shortpaySection = document.getElementById('shortpay-bills-section');
-    paidSection = document.getElementById('paid-bills-section');
+    billContainer = document.getElementById('bill-container');
+    filterTabsContainer = document.getElementById('filter-tabs-container');
     
     // Initial load
     loadDashboard();
     
-    // --- Modal Event Listeners ---
+    // --- Modal Event Listeners (Unchanged) ---
     document.getElementById('add-new-bill-btn').addEventListener('click', () => showModal('add-bill-modal'));
-    
     document.querySelectorAll('[data-close]').forEach(btn => {
       btn.addEventListener('click', () => closeModal(btn.dataset.close));
     });
-    
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
       overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) {
-          closeModal(overlay.id);
-        }
+        if (e.target === overlay) closeModal(overlay.id);
       });
     });
 
-    // --- Form Submission Handlers ---
+    // --- Form Submission Handlers (Unchanged) ---
     document.getElementById('add-bill-form').addEventListener('submit', handleAddBill);
     document.getElementById('add-payment-form').addEventListener('submit', handleAddPayment);
     
-    // --- File Input Name Display ---
+    // --- File Input Name Display (Unchanged) ---
     document.getElementById('bill-attachment').addEventListener('change', (e) => {
       const fileName = e.target.files.length > 0 ? e.target.files[0].name : 'No file selected.';
       document.getElementById('bill-attachment-name').textContent = fileName;
     });
-    
     document.getElementById('payment-attachment').addEventListener('change', (e) => {
       const fileName = e.target.files.length > 0 ? e.target.files[0].name : 'No file selected.';
       document.getElementById('payment-attachment-name').textContent = fileName;
     });
 
-    // --- Dynamic Button Clicks (Event Delegation) ---
-    const mainContent = document.querySelector('.main-content');
-    
-    mainContent.addEventListener('click', (e) => {
+    // --- NEW: Filter Tab Click Listener ---
+    filterTabsContainer.addEventListener('click', (e) => {
+      if (e.target.tagName === 'BUTTON') {
+        const filter = e.target.dataset.filter;
+        if (filter !== currentFilter) {
+          renderFilteredBills(filter);
+        }
+      }
+    });
+
+    // --- MODIFIED: Dynamic Button Click Listener (attached to container) ---
+    billContainer.addEventListener('click', (e) => {
       const target = e.target;
       
-      // Handle "Mark as Paid"
+      // Handle "Mark as Paid" / "Pay Balance"
       if (target.classList.contains('btn-mark-paid')) {
         const billId = target.dataset.billId;
         const billAmount = target.dataset.billAmount;
         document.getElementById('payment-bill-id').value = billId;
-        document.getElementById('payment-amount').value = billAmount; // Pre-fill with full amount
+        document.getElementById('payment-amount').value = billAmount; 
         showModal('add-payment-modal');
       }
 
@@ -602,7 +556,7 @@
   });
 
   // =================================================================
-  // MODAL FUNCTIONS
+  // MODAL FUNCTIONS (Unchanged)
   // =================================================================
   
   function showModal(modalId) {
@@ -613,19 +567,15 @@
     const modal = document.getElementById(modalId);
     modal.classList.remove('visible');
     const form = modal.querySelector('form');
-    if (form) {
-      form.reset();
-    }
-    // Reset file input names
+    if (form) form.reset();
     if (document.getElementById('bill-attachment-name')) {
       document.getElementById('bill-attachment-name').textContent = 'No file selected.';
     }
     if (document.getElementById('payment-attachment-name')) {
       document.getElementById('payment-attachment-name').textContent = 'No file selected.';
     }
-    // Reset card selector
     if (document.getElementById('bill-card-id-select')) {
-      populateCardSelector(allCardData); // Repopulate and reset
+      populateCardSelector(allCardData);
     }
   }
 
@@ -637,10 +587,8 @@
     showLoading(true);
     
     const payload = {
-      action: "getCreditCardDashboard", // We use the same function, it gets all cards and all bills
-      params: { 
-        userName: currentUser.name 
-      }
+      action: "getCreditCardDashboard",
+      params: { userName: currentUser.name }
     };
     
     try {
@@ -653,8 +601,11 @@
       
       if (json.status === "success") {
         allCardData = json.data; // Cache card data
-        populateCardSelector(allCardData); // NEW: Populate the modal dropdown
-        renderBillSections(allCardData); // NEW: Render the 3 sections
+        populateCardSelector(allCardData); // Populate the modal dropdown
+        
+        // --- NEW: Flatten bills and render the default filter ---
+        flattenAllBills(allCardData);
+        renderFilteredBills(currentFilter); // Render 'due' bills by default
       } else {
         showError(json.data?.message || "Could not load data.");
       }
@@ -666,19 +617,16 @@
   }
   
   /**
-   * NEW: Populates the <select> in the "Add Bill" modal
+   * Populates the <select> in the "Add Bill" modal (Unchanged)
    */
   function populateCardSelector(cards) {
     const select = document.getElementById('bill-card-id-select');
     if (!select) return;
-    
-    select.innerHTML = '<option value="">-- Select a Card --</option>'; // Clear and add default
-    
+    select.innerHTML = '<option value="">-- Select a Card --</option>';
     if (!cards || cards.length === 0) {
       select.innerHTML = '<option value="">-- No cards found. Add a card first. --</option>';
       return;
     }
-    
     cards.forEach(card => {
       const option = document.createElement('option');
       option.value = card.id;
@@ -688,12 +636,10 @@
   }
 
   /**
-   * NEW: Sorts all bills from all cards into 3 sections
+   * --- NEW: Flattens all bills from all cards into a single array
    */
-  function renderBillSections(cards) {
-    const allBills = [];
-    
-    // Flatten all bills from all cards into one array, adding card info
+  function flattenAllBills(cards) {
+    allBills = []; // Clear previous data
     cards.forEach(card => {
       card.bills.forEach(bill => {
         allBills.push({
@@ -703,44 +649,70 @@
         });
       });
     });
+  }
 
-    // Sort bills by status
-    const dueBills = allBills.filter(b => b.status === 'Pending').sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate));
-    const shortpayBills = allBills.filter(b => b.status === 'Shortpay').sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate));
-    const paidBills = allBills.filter(b => b.status === 'Paid').sort((a,b) => new Date(b.payDate) - new Date(b.payDate)); // Sort by pay date
+  /**
+   * --- NEW: Master render function based on filter
+   */
+  function renderFilteredBills(filterType) {
+    currentFilter = filterType;
+    showLoading(true);
 
-    // Render tables
-    renderBillTable(dueBillsContainer, dueSection, dueBills, 'Due');
-    renderBillTable(shortpayBillsContainer, shortpaySection, shortpayBills, 'Shortpay');
-    renderBillTable(paidBillsContainer, paidSection, paidBills, 'Paid');
+    // Update active button
+    document.querySelectorAll('.filter-tabs button').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.filter === filterType);
+    });
+
+    let filteredBills = [];
+    let statusType = filterType; // Used for table header logic
+
+    switch (filterType) {
+      case 'due':
+        filteredBills = allBills
+          .filter(b => b.status === 'Pending')
+          .sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate));
+        break;
+      case 'shortpay':
+        filteredBills = allBills
+          .filter(b => b.status === 'Shortpay')
+          .sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate));
+        break;
+      case 'paid':
+        filteredBills = allBills
+          .filter(b => b.status === 'Paid')
+          .sort((a,b) => new Date(b.payDate) - new Date(b.payDate));
+        break;
+      case 'new':
+        const twoDaysAgo = new Date();
+        twoDaysAgo.setDate(twoDaysAgo.getDate() - 2); // Set date to 48 hours ago
+        filteredBills = allBills
+          .filter(b => new Date(b.billDate) >= twoDaysAgo)
+          .sort((a,b) => new Date(b.billDate) - new Date(b.billDate));
+        statusType = 'new'; // Pass this to renderBillTable
+        break;
+    }
+
+    // Render the single table
+    renderBillTable(billContainer, filteredBills, statusType);
+    showLoading(false);
   }
   
   /**
-   * MODIFIED: Renders a bill table into a specific container
+   * --- MODIFIED: Renders a single bill table into the main container
    */
-  function renderBillTable(container, sectionElement, bills, statusType) {
+  function renderBillTable(container, bills, statusType) {
+    // No longer need 'sectionElement'
+    
     if (bills.length === 0) {
       container.innerHTML = `<div class="no-bills-message">No ${statusType.toLowerCase()} bills found.</div>`;
-      // Hide the whole section if there are no bills
-      sectionElement.style.display = 'none';
       return;
     }
 
-    // Show the section if it has bills
-    sectionElement.style.display = 'block';
-    
-    // Define headers
-    let headers = `
-      <th>Card</th>
-      <th>Bill #</th>
-      <th>Bill Date</th>
-      <th>Due Date</th>
-      <th>Amount</th>
-      <th>Bill Attachment</th>
-      <th>Actions</th>`;
+    let headers = ``;
+    let isPaidView = (statusType === 'Paid' || statusType === 'Shortpay');
 
-    // If "Paid", show payment details
-    if (statusType === 'Paid' || statusType === 'Shortpay') {
+    // Define headers based on view type
+    if (isPaidView) {
        headers = `
         <th>Card</th>
         <th>Bill #</th>
@@ -748,6 +720,16 @@
         <th class="amount">Bill Amount</th>
         <th class="paid-amount">Paid Amount</th>
         <th>Pay Date</th>
+        <th>Actions</th>`;
+    } else {
+      // This works for 'due' and 'new'
+       headers = `
+        <th>Card</th>
+        <th>Bill #</th>
+        <th>Bill Date</th>
+        <th>Due Date</th>
+        <th>Amount</th>
+        <th>Bill Attachment</th>
         <th>Actions</th>`;
     }
 
@@ -779,8 +761,10 @@
                           Mark as Paid
                         </button>`;
       } else if (bill.status === 'Shortpay') {
-        actionButton = `<button class="btn-paid btn-mark-paid" data-bill-id="${bill.id}" data-bill-amount="${bill.amount - bill.payAmount}">
-                          Pay Balance
+        // Calculate remaining balance
+        const remainingBalance = (parseFloat(bill.amount) - parseFloat(bill.payAmount)).toFixed(2);
+        actionButton = `<button class="btn-paid btn-mark-paid" data-bill-id="${bill.id}" data-bill-amount="${remainingBalance}">
+                          Pay Balance (₹${remainingBalance})
                         </button>
                         <button class="btn-secondary btn-show-details" style="margin-top: 5px;" data-payment-details="${encodedPaymentData}">
                           Show Details
@@ -792,20 +776,20 @@
       }
 
       // --- Row Rendering Logic ---
-      if (statusType === 'Paid' || statusType === 'Shortpay') {
-        const amountClass = (statusType === 'Shortpay') ? 'shortpay-amount' : 'paid-amount';
+      if (isPaidView) {
+        const amountClass = (bill.status === 'Shortpay') ? 'shortpay-amount' : 'paid-amount';
         return `
           <tr>
             <td>${cardName}</td>
             <td>${bill.billNumber}</td>
             <td>${billDate}</td>
             <td class="amount">₹${parseFloat(bill.amount).toFixed(2)}</td>
-            <td class="${amountClass}">₹${parseFloat(bill.payAmount).toFixed(2)}</td>
+            <td class="${amountClass}">₹${parseFloat(bill.payAmount || 0).toFixed(2)}</td>
             <td>${payDate}</td>
             <td>${actionButton}</td>
           </tr>
         `;
-      } else { // Due
+      } else { // Due or New
         return `
           <tr>
             <td>${cardName}</td>
@@ -829,18 +813,27 @@
   }
   
   function showLoading(isLoading) {
-    if (loadingSpinner) {
-      loadingSpinner.style.display = isLoading ? 'block' : 'none';
+    if (!billContainer) return; // Guard clause
+    if (isLoading) {
+      // If loading, show spinner *inside* the container
+      billContainer.innerHTML = `<div id="loading-spinner" class="loading-spinner">Loading bills...</div>`;
+    } else {
+      // If done loading, the render function will overwrite this.
+      // But if we just *stop* loading, remove the spinner.
+      const spinner = billContainer.querySelector('#loading-spinner');
+      if (spinner) {
+        spinner.remove();
+      }
     }
   }
   
   function showError(message) {
     alert("Error: " + message);
-    loadingSpinner.innerHTML = `<div class="no-bills-message" style="background:#fff8f8; color: #c00;">${message}</div>`;
+    billContainer.innerHTML = `<div class="no-bills-message" style="background:#fff8f8; color: #c00;">${message}</div>`;
   }
 
   // =================================================================
-  // FORM HANDLERS (Sending data)
+  // FORM HANDLERS (Sending data) - (MODIFIED)
   // =================================================================
   
   async function handleAddBill(e) {
@@ -863,7 +856,7 @@
     const payload = {
       action: "addBill",
       params: {
-        cardId: document.getElementById('bill-card-id-select').value, // Get from select
+        cardId: document.getElementById('bill-card-id-select').value,
         billNumber: document.getElementById('bill-number').value,
         billDate: document.getElementById('bill-date').value,
         dueDate: document.getElementById('bill-due-date').value,
@@ -890,6 +883,8 @@
       
       if (json.status === "success") {
         closeModal('add-bill-modal');
+        // --- MODIFIED: Go to 'new' filter after adding a bill ---
+        currentFilter = 'new'; 
         loadDashboard(); // Refresh dashboard
       } else {
         alert("Error: " + (json.data?.message || "Could not save bill."));
@@ -941,6 +936,8 @@
       
       if (json.status === "success") {
         closeModal('add-payment-modal');
+        // --- MODIFIED: Go to the relevant filter after paying ---
+        currentFilter = (json.data.newState === 'Shortpay') ? 'shortpay' : 'paid';
         loadDashboard(); // Refresh dashboard
       } else {
         alert("Error: " + (json.data?.message || "Could not save payment."));
@@ -975,13 +972,10 @@
     const attachmentHtml = (data.paymentAttachmentURL && data.paymentAttachmentURL.startsWith('http'))
         ? `<p><a href="${data.paymentAttachmentURL}" target="_blank" style="font-size: 1.2rem; color: #0056b3;">View Payment Attachment</a></p>`
         : '<p>No payment attachment found.</p>';
-
     const htmlContent = `
-        <!DOCTYPE html>
-        <html lang="en">
+        <!DOCTYPE html><html lang="en">
         <head>
-            <meta charset="UTF-8">
-            <title>Payment Details - ${data.billNumber}</title>
+            <meta charset="UTF-8"><title>Payment Details - ${data.billNumber}</title>
             <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
             <style>
                 body { font-family: 'Poppins', sans-serif; background: #f4f7fa; padding: 40px; color: #333; }
@@ -990,9 +984,7 @@
                 .detail-grid { display: grid; grid-template-columns: 200px 1fr; gap: 16px; }
                 .detail-grid strong { font-weight: 600; color: #555; }
                 .detail-grid span { font-weight: 500; color: #111; }
-                p { line-height: 1.6; }
-                a { color: #0056b3; text-decoration: none; }
-                a:hover { text-decoration: underline; }
+                p { line-height: 1.6; } a { color: #0056b3; text-decoration: none; } a:hover { text-decoration: underline; }
             </style>
         </head>
         <body>
@@ -1008,10 +1000,8 @@
                 <hr style="border: 0; border-top: 1px solid #e9eef2; margin: 24px 0;">
                 ${attachmentHtml}
             </div>
-        </body>
-        </html>
+        </body></html>
     `;
-    
     const newTab = window.open();
     newTab.document.write(htmlContent);
     newTab.document.close();
