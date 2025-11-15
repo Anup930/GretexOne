@@ -1,4 +1,4 @@
-<!-- V 2.0.7 -->
+<!-- V 2.1.9 -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -8,7 +8,8 @@
   <title>Gretex One - Credit Card</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
 
   <style>
@@ -22,20 +23,104 @@
     
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
+    /* === NEW: Layout styles from access.html === */
     body {
       font-family: 'Poppins', sans-serif;
-      background: #f0f4f8;
-      padding: 40px;
+      background: #f4f7fa; /* Cleaner background */
       color: #333;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* === NEW: Sidebar styles from access.html === */
+    .sidebar {
+      flex-basis: 260px;
+      flex-shrink: 0;
+      background: #ffffff;
+      border-right: 1px solid #e9eef2;
+      display: flex;
+      flex-direction: column;
+      padding: 25px 20px;
     }
     
-    /* --- MODIFIED: Added two back links --- */
+    .sidebar-header {
+      text-align: left;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      padding-left: 10px;
+      border-bottom: 1px solid #e9eef2;
+    }
+    
+    .sidebar-header h2 { font-size: 1.4rem; font-weight: 600; color: #3b439c; }
+    #user-name { font-size: 0.9rem; font-weight: 500; color: #555; margin-top: 8px; }
+    
+    .nav-links { flex-grow: 1; list-style: none; margin: 0; padding: 0; }
+    
+    .nav-links li a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      margin-bottom: 8px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 500;
+      color: #4a5568;
+      transition: all 0.2s ease-in-out;
+    }
+    
+    .nav-links li a:hover {
+      background-color: #f4f7fa;
+      color: #3b439c;
+    }
+
+    .nav-links li a.active {
+      background-color: #3b439c;
+      color: #ffffff;
+      font-weight: 600;
+      box-shadow: 0 5px 15px -5px rgba(59, 67, 156, 0.4);
+    }
+    
+    .nav-links li a .material-icons { font-size: 22px; }
+    .nav-links li a.active .material-icons { color: #ffffff; }
+
+    .sidebar-footer { margin-top: 20px; }
+    
+    #logout-button {
+      width: 100%;
+      padding: 14px 20px;
+      background: #fbeeee;
+      color: #d93025;
+      border: none;
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 1rem;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: background-color 0.2s;
+    }
+    
+    #logout-button:hover { background: #f8d7da; }
+    #logout-button .material-icons-outlined { font-size: 22px; }
+
+    /* === NEW: Main Content styles from access.html === */
+    .main-content {
+      flex-grow: 1;
+      padding: 40px;
+      overflow-y: auto;
+    }
+
+    /* === Page-Specific Styles (Mostly Unchanged) === */
+    
+    /* MODIFIED: Removed margin-bottom, as it's now in .main-content */
     .back-link {
       font-size: 1rem;
       text-decoration: none;
       color: #4a5a9b;
       font-weight: 500;
-      margin-bottom: 20px;
       display: inline-block;
     }
     .back-link:hover { text-decoration: underline; }
@@ -52,6 +137,8 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 24px;
+      /* NEW: Add margin-top to separate from back link */
+      margin-top: 20px; 
     }
     
     .dashboard-header h1 {
@@ -71,7 +158,6 @@
       cursor: pointer;
       box-shadow: 0 5px 15px rgba(59, 67, 156, 0.2);
       transition: all 0.2s;
-      /* NEW: For icon alignment */
       display: inline-flex;
       align-items: center;
       gap: 6px;
@@ -81,14 +167,12 @@
       transform: translateY(-2px);
     }
     
-    /* --- NEW: Grid container for cards --- */
     #card-grid-container {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 32px;
     }
 
-    /* --- NEW: Detail container (hidden by default) --- */
     #card-detail-container {
       display: none;
     }
@@ -100,7 +184,6 @@
       color: #555;
     }
     
-    /* --- Card Module (Detail View) --- */
     .card-module {
       background: var(--card-bg);
       border-radius: 16px;
@@ -114,7 +197,6 @@
       border-bottom: 1px solid #e9eef2;
     }
     
-    /* --- MODIFIED: Credit Card Visual --- */
     .credit-card-visual {
       width: 300px;
       height: 180px;
@@ -125,7 +207,7 @@
       box-shadow: 0 10px 30px rgba(50, 60, 140, 0.3);
       display: flex;
       flex-direction: column;
-      justify-content: space-between; /* This is key */
+      justify-content: space-between;
       cursor: pointer;
       transition: all 0.2s ease;
     }
@@ -135,11 +217,9 @@
     }
     
     .card-issuer { font-size: 1.2rem; font-weight: 600; }
-    /* REMOVED margin-top: auto */
     .card-number { font-size: 1.1rem; letter-spacing: 2px; font-family: monospace; }
     .card-name { font-size: 0.9rem; font-weight: 500; text-transform: uppercase; }
 
-    /* --- NEW: Due Info section on card --- */
     .card-due-info {
       margin-top: 10px;
       padding-top: 10px;
@@ -161,7 +241,6 @@
       font-weight: 500;
     }
 
-    /* --- Styles for Detail View --- */
     .card-module-body {
       padding: 24px 32px;
     }
@@ -186,7 +265,6 @@
       font-family: 'Poppins', sans-serif;
       cursor: pointer;
       transition: all 0.2s;
-      /* NEW: For icon alignment */
       display: inline-flex;
       align-items: center;
       gap: 4px;
@@ -228,7 +306,6 @@
     .bill-table .amount { font-weight: 600; color: #c62828; }
     .bill-table .paid-amount { font-weight: 600; color: #2e7d32; }
 
-    /* NEW: For attachment links */
     .bill-table a {
       color: #3a3f9d;
       font-weight: 500;
@@ -334,30 +411,48 @@
 </head>
 <body>
 
-  <a href="App_access.html" class="back-link" id="back-to-home-link">← Back to Home</a>
-  <a href="#" class="back-link" id="back-to-grid-link" style="display: none;">← Back to All Cards</a>
-
-  <div class="app-content">
-    
-    <div class="dashboard-header">
-      <h1 id="dashboard-title">Credit Card Management</h1>
-      <button class="btn-primary" id="add-new-card-btn">
-        <span class="material-icons-outlined" style="font-size: 1.2rem;">add_card</span>
-        Add New Card
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h2>Gretex One</h2>
+      <div id="user-name">Loading...</div>
+    </div>
+  
+    <ul id="nav-links-list" class="nav-links">
+      </ul>
+  
+    <div class="sidebar-footer">
+      <button id="logout-button">
+        <span class="material-icons-outlined">logout</span>
+        Logout
       </button>
     </div>
-    
-    <div id="card-grid-container">
-      </div>
-
-    <div id="card-detail-container">
-      </div>
-
-    <div id="loading-spinner" class="loading-spinner">Loading your card dashboard...</div>
-    
   </div>
 
-  <div class="modal-overlay" id="add-card-modal">
+  <div class="main-content">
+
+    <a href="#" class="back-link" id="back-to-grid-link" style="display: none;">← Back to All Cards</a>
+  
+    <div class="app-content">
+      
+      <div class="dashboard-header">
+        <h1 id="dashboard-title">Credit Card Management</h1>
+        <button class="btn-primary" id="add-new-card-btn">
+          <span class="material-icons-outlined" style="font-size: 1.2rem;">add_card</span>
+          Add New Card
+        </button>
+      </div>
+      
+      <div id="card-grid-container">
+        </div>
+  
+      <div id="card-detail-container">
+        </div>
+  
+      <div id="loading-spinner" class="loading-spinner">Loading your card dashboard...</div>
+      
+    </div>
+
+  </div> <div class="modal-overlay" id="add-card-modal">
     <div class="modal-content">
       <h2>Add New Credit Card</h2>
       <form id="add-card-form">
@@ -453,11 +548,11 @@
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyH5kOEdJGlPgx4sMH3vEqkixalf3X6PACttZHMLWh8M-TtLT2OUN5U_XRMGP-VWAfW/exec";
   
   let currentUser = null;
-  let allCardData = []; // Local cache for data
+  let allCardData = []; 
 
-  // NEW: Element globals
-  let cardGridContainer, cardDetailContainer, backToGridLink, backToHomeLink, addNewCardBtn, loadingSpinner, dashboardTitle;
+  let cardGridContainer, cardDetailContainer, backToGridLink, addNewCardBtn, loadingSpinner, dashboardTitle;
 
+  // === MODIFIED: Merged 'access.html' JS with 'Craditcard.html' JS ===
   document.addEventListener("DOMContentLoaded", function() {
     const userString = sessionStorage.getItem("gretexUser");
     if (!userString) {
@@ -466,11 +561,50 @@
     }
     currentUser = JSON.parse(userString);
     
-    // NEW: Get all view elements
+    // === NEW: Sidebar Population Logic (from access.html) ===
+    document.getElementById("user-name").innerText = (currentUser && currentUser.name) ? currentUser.name : "User";
+    
+    const appMap = {
+      "App1_CreditCard": { name: "Credit Card", page: "creditcard", icon: "credit_card" },
+      "App2_Bills": { name: "Bills", page: "bills", icon: "receipt_long" },
+      "App3_MobileBills": { name: "Mobile Bills", page: "mobilebills", icon: "phone_android" }
+    };
+    
+    const navLinksList = document.getElementById("nav-links-list");
+
+    // Create and append Home link first (now NOT active)
+    const homeLink = document.createElement("li");
+    homeLink.innerHTML = `<a href="App_access.html"><span class="material-icons">home</span> Home</a>`;
+    navLinksList.appendChild(homeLink);
+
+    if (currentUser.apps && currentUser.apps.length > 0) {
+      currentUser.apps.forEach(appKey => {
+        const app = appMap[appKey];
+        if (!app) return; 
+
+        // === MODIFIED: Check if this is the active page ===
+        const isActive = (app.page === 'creditcard') ? 'active' : '';
+
+        const navLink = document.createElement("li");
+        navLink.innerHTML = `<a href="${app.page}.html" class="${isActive}"><span class="material-icons">${app.icon}</span> ${app.name}</a>`;
+        navLinksList.appendChild(navLink);
+      });
+    }
+
+    // === NEW: Logout Button Logic (from access.html) ===
+    document.getElementById("logout-button").addEventListener("click", function() {
+      sessionStorage.removeItem("gretexUser");
+      window.location.href = "index.html";
+    });
+
+    // --- End of Sidebar Logic ---
+
+
+    // === Original 'Craditcard.html' Logic (Resumes Below) ===
+    
     cardGridContainer = document.getElementById('card-grid-container');
     cardDetailContainer = document.getElementById('card-detail-container');
     backToGridLink = document.getElementById('back-to-grid-link');
-    backToHomeLink = document.getElementById('back-to-home-link');
     addNewCardBtn = document.getElementById('add-new-card-btn');
     loadingSpinner = document.getElementById('loading-spinner');
     dashboardTitle = document.getElementById('dashboard-title');
@@ -478,7 +612,7 @@
     // Initial load
     loadDashboard();
     
-    // --- Modal Event Listeners (Unchanged) ---
+    // --- Modal Event Listeners ---
     addNewCardBtn.addEventListener('click', () => showModal('add-card-modal'));
     
     document.querySelectorAll('[data-close]').forEach(btn => {
@@ -493,12 +627,12 @@
       });
     });
 
-    // --- Form Submission Handlers (Unchanged) ---
+    // --- Form Submission Handlers ---
     document.getElementById('add-card-form').addEventListener('submit', handleAddCard);
     document.getElementById('add-bill-form').addEventListener('submit', handleAddBill);
     document.getElementById('add-payment-form').addEventListener('submit', handleAddPayment);
     
-    // --- File Input Name Display (Unchanged) ---
+    // --- File Input Name Display ---
     document.getElementById('bill-attachment').addEventListener('change', (e) => {
       const fileName = e.target.files.length > 0 ? e.target.files[0].name : 'No file selected.';
       document.getElementById('bill-attachment-name').textContent = fileName;
@@ -509,15 +643,14 @@
       document.getElementById('payment-attachment-name').textContent = fileName;
     });
 
-    // --- NEW: View Navigation Listeners ---
+    // --- View Navigation Listeners ---
     backToGridLink.addEventListener('click', (e) => {
       e.preventDefault();
       showGridView();
     });
 
-    // --- MODIFIED: Dynamic Button Clicks (Event Delegation) ---
+    // --- Dynamic Button Clicks (Event Delegation) ---
     
-    // Clicks on the card grid (to view details)
     cardGridContainer.addEventListener('click', (e) => {
       const cardVisual = e.target.closest('.credit-card-visual');
       if (cardVisual) {
@@ -526,16 +659,13 @@
       }
     });
     
-    // Clicks within the detail view (Add Bill, Mark Paid, Show Details)
     cardDetailContainer.addEventListener('click', (e) => {
-      // Handle "Add Bill" click
       if (e.target.classList.contains('btn-add-bill')) {
         const cardId = e.target.dataset.cardId;
         document.getElementById('bill-card-id').value = cardId;
         showModal('add-bill-modal');
       }
       
-      // Handle "Mark as Paid" click
       if (e.target.classList.contains('btn-mark-paid')) {
         const billId = e.target.dataset.billId;
         const billAmount = e.target.dataset.billAmount;
@@ -544,18 +674,13 @@
         showModal('add-payment-modal');
       }
 
-      // --- NEW: Handle "Show Details" click ---
       if (e.target.classList.contains('btn-show-details')) {
         const encodedData = e.target.dataset.paymentDetails;
         if (encodedData) {
           try {
-            // Decode the Base64 data
             const decodedData = atob(encodedData);
             const paymentData = JSON.parse(decodedData);
-            
-            // Open the details in a new tab
             openPaymentDetailsTab(paymentData);
-
           } catch (err) {
             console.error("Error decoding payment data:", err);
             alert("Could not load payment details.");
@@ -566,7 +691,7 @@
   });
 
   // =================================================================
-  // NEW: VIEW MANAGEMENT FUNCTIONS
+  // VIEW MANAGEMENT FUNCTIONS
   // =================================================================
 
   function showGridView() {
@@ -575,7 +700,6 @@
     backToGridLink.style.display = 'none';
     
     addNewCardBtn.style.display = 'inline-flex';
-    backToHomeLink.style.display = 'inline-block';
     dashboardTitle.textContent = 'Credit Card Management';
   }
   
@@ -585,12 +709,11 @@
     backToGridLink.style.display = 'inline-block';
     
     addNewCardBtn.style.display = 'none';
-    backToHomeLink.style.display = 'none';
     dashboardTitle.textContent = cardName;
   }
 
   // =================================================================
-  // MODAL FUNCTIONS (Unchanged)
+  // MODAL FUNCTIONS
   // =================================================================
   
   function showModal(modalId) {
@@ -609,7 +732,7 @@
   }
 
   // =================================================================
-  // DATA LOADING & RENDERING (MODIFIED)
+  // DATA LOADING & RENDERING
   // =================================================================
   
   async function loadDashboard() {
@@ -645,7 +768,7 @@
   }
   
   /**
-    * NEW: Renders the grid of card visuals
+    * Renders the grid of card visuals
     */
   function renderCardGrid(cards) {
     cardGridContainer.innerHTML = ''; // Clear existing content
@@ -666,7 +789,7 @@
   }
 
   /**
-    * NEW: Calculates Total Due and Next Due Date for a card
+    * Calculates Total Due and Next Due Date for a card
     */
   function calculateCardSummary(card) {
     const pendingBills = card.bills.filter(b => b.status === 'Pending');
@@ -677,7 +800,6 @@
     
     const totalDue = pendingBills.reduce((sum, bill) => sum + parseFloat(bill.amount), 0);
     
-    // Find the earliest due date
     const earliestDueDate = pendingBills
       .map(b => new Date(b.dueDate))
       .sort((a, b) => a - b)[0]
@@ -687,7 +809,7 @@
   }
 
   /**
-    * NEW: Creates just the HTML for the card visual
+    * Creates just the HTML for the card visual
     */
   function createCardVisual(card, summary) {
     const dueAmountClass = summary.totalDue === 0 ? 'due-value zero' : 'due-value';
@@ -718,7 +840,7 @@
   }
 
   /**
-    * NEW: Renders the full detail view for a single card
+    * Renders the full detail view for a single card
     */
   function renderCardDetail(cardId) {
     const card = allCardData.find(c => c.id === cardId);
@@ -732,13 +854,11 @@
   }
   
   /**
-    * MODIFIED: Creates the *detail* module.
+    * Creates the *detail* module.
     */
   function createCardDetailModule(card) {
-    // --- MODIFIED: Get ALL bills, not just pending ---
     const allBills = card.bills;
     
-    // Use the *same* visual from the grid
     const summary = calculateCardSummary(card);
     const cardVisualHtml = createCardVisual(card, summary);
     
@@ -760,20 +880,19 @@
             ${renderBillTable(allBills)}
           </div>
           
-          </div>
+        </div>
       </div>
     `;
   }
   
   /**
-    * MODIFIED: Renders the HTML for a single bill table with dynamic actions
+    * Renders the HTML for a single bill table with dynamic actions
     */
   function renderBillTable(bills) {
     if (bills.length === 0) {
       return `<div class="no-bills-message">No bills found for this card.</div>`;
     }
     
-    // --- MODIFIED: New headers including Bill Attachment ---
     let headers = `
       <th>Bill #</th>
       <th>Bill Date</th>
@@ -783,24 +902,19 @@
       <th>Actions</th>`;
     
     const rows = bills.map(bill => {
-      // Format dates
       const billDate = bill.billDate ? new Date(bill.billDate).toISOString().split('T')[0] : 'N/A';
       const dueDate = bill.dueDate ? new Date(bill.dueDate).toISOString().split('T')[0] : 'N/A';
 
-      // --- NEW: Create Bill Attachment Link ---
       const billAttachmentLink = (bill.billAttachmentURL && bill.billAttachmentURL.startsWith('http'))
         ? `<a href="${bill.billAttachmentURL}" target="_blank">View Bill</a>`
         : 'N/A';
       
-      // --- NEW: Dynamic Action Button ---
       let actionButton = '';
       if (bill.status === 'Pending') {
-        // If pending, show "Mark as Paid" button
         actionButton = `<button class="btn-paid btn-mark-paid" data-bill-id="${bill.id}" data-bill-amount="${bill.amount}">
                           Mark as Paid
                         </button>`;
       } else { 
-        // If paid, show "Paid - Show Details" button
         const paymentData = {
           billNumber: bill.billNumber,
           txnNo: bill.txnNo,
@@ -810,7 +924,6 @@
           paymentAttachmentURL: bill.paymentAttachmentURL
         };
         
-        // Encode the data to Base64 to safely pass in a data attribute
         const encodedPaymentData = btoa(JSON.stringify(paymentData)); 
 
         actionButton = `<button class="btn-secondary btn-show-details" data-payment-details="${encodedPaymentData}">
@@ -818,7 +931,6 @@
                         </button>`;
       }
 
-      // --- MODIFIED: Return the new row structure ---
       return `
         <tr>
           <td>${bill.billNumber}</td>
@@ -840,13 +952,12 @@
   }
   
   /**
-    * MODIFIED: Show/hide spinner and containers
+    * Show/hide spinner and containers
     */
   function showLoading(isLoading) {
     if (loadingSpinner) {
       loadingSpinner.style.display = isLoading ? 'block' : 'none';
     }
-    // Hide containers when loading
     if (isLoading) {
       cardGridContainer.style.display = 'none';
       cardDetailContainer.style.display = 'none';
@@ -859,7 +970,7 @@
   }
 
   // =================================================================
-  // FORM HANDLERS (Sending data) - (Unchanged)
+  // FORM HANDLERS (Sending data)
   // =================================================================
 
   async function handleAddCard(e) {
@@ -940,7 +1051,6 @@
       
       if (json.status === "success") {
         closeModal('add-bill-modal');
-        // REFRESH: Re-load all data and show the grid
         loadDashboard();
       } else {
         alert("Error: " + (json.data?.message || "Could not save bill."));
@@ -992,7 +1102,6 @@
       
       if (json.status === "success") {
         closeModal('add-payment-modal');
-        // REFRESH: Re-load all data and show the grid
         loadDashboard();
       } else {
         alert("Error: " + (json.data?.message || "Could not save payment."));
@@ -1006,7 +1115,7 @@
   }
   
   /**
-    * Helper function to convert a file to a Base64 string (Unchanged)
+    * Helper function to convert a file to a Base64 string
     */
   function fileToBase64(file) {
     return new Promise((resolve, reject) => {
@@ -1021,7 +1130,7 @@
   }
 
   // =================================================================
-  // --- NEW: FUNCTION TO OPEN PAYMENT DETAILS IN A NEW TAB ---
+  // FUNCTION TO OPEN PAYMENT DETAILS IN A NEW TAB
   // =================================================================
 
   function openPaymentDetailsTab(data) {
@@ -1052,11 +1161,11 @@
             <div class="container">
                 <h1>Payment Details</h1>
                 <div class="detail-grid">
-                    <strong>Bill Number:</strong>       <span>${data.billNumber || 'N/A'}</span>
+                    <strong>Bill Number:</strong>    <span>${data.billNumber || 'N/A'}</span>
                     <strong>Transaction No:</strong> <span>${data.txnNo || 'N/A'}</span>
-                    <strong>Payment Date:</strong>     <span>${data.payDate || 'N/A'}</span>
-                    <strong>Payment Amount:</strong>   <span>₹${data.payAmount || '0.00'}</span>
-                    <strong>Paid By:</strong>          <span>${data.paidBy || 'N/A'}</span>
+                    <strong>Payment Date:</strong>   <span>${data.payDate || 'N/A'}</span>
+                    <strong>Payment Amount:</strong> <span>₹${data.payAmount || '0.00'}</span>
+                    <strong>Paid By:</strong>        <span>${data.paidBy || 'N/A'}</span>
                 </div>
                 <hr style="border: 0; border-top: 1px solid #e9eef2; margin: 24px 0;">
                 ${attachmentHtml}
