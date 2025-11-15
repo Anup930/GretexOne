@@ -1,4 +1,4 @@
-<!-- V 2.0.7 -->
+<!-- V 2.0.9 -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -29,7 +29,6 @@
       color: #333;
     }
     
-    /* --- MODIFIED: Added two back links --- */
     .back-link {
       font-size: 1rem;
       text-decoration: none;
@@ -71,7 +70,6 @@
       cursor: pointer;
       box-shadow: 0 5px 15px rgba(59, 67, 156, 0.2);
       transition: all 0.2s;
-      /* NEW: For icon alignment */
       display: inline-flex;
       align-items: center;
       gap: 6px;
@@ -81,14 +79,12 @@
       transform: translateY(-2px);
     }
     
-    /* --- NEW: Grid container for cards --- */
     #card-grid-container {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 32px;
     }
 
-    /* --- NEW: Detail container (hidden by default) --- */
     #card-detail-container {
       display: none;
     }
@@ -100,7 +96,6 @@
       color: #555;
     }
     
-    /* --- Card Module (Detail View) --- */
     .card-module {
       background: var(--card-bg);
       border-radius: 16px;
@@ -114,7 +109,6 @@
       border-bottom: 1px solid #e9eef2;
     }
     
-    /* --- MODIFIED: Credit Card Visual --- */
     .credit-card-visual {
       width: 300px;
       height: 180px;
@@ -125,7 +119,7 @@
       box-shadow: 0 10px 30px rgba(50, 60, 140, 0.3);
       display: flex;
       flex-direction: column;
-      justify-content: space-between; /* This is key */
+      justify-content: space-between;
       cursor: pointer;
       transition: all 0.2s ease;
     }
@@ -135,17 +129,18 @@
     }
     
     .card-issuer { font-size: 1.2rem; font-weight: 600; }
-    /* REMOVED margin-top: auto */
     .card-number { font-size: 1.1rem; letter-spacing: 2px; font-family: monospace; }
     .card-name { font-size: 0.9rem; font-weight: 500; text-transform: uppercase; }
 
-    /* --- NEW: Due Info section on card --- */
+    /* --- MODIFIED: Due Info section on card --- */
     .card-due-info {
       margin-top: 10px;
       padding-top: 10px;
       border-top: 1px solid rgba(255, 255, 255, 0.2);
-      display: flex;
-      justify-content: space-between;
+      /* MODIFIED: Changed to a 2x2 grid */
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
     }
     .card-due-info .due-label {
       font-weight: 300;
@@ -156,10 +151,21 @@
       font-weight: 600;
       font-size: 0.9rem;
     }
-    .card-due-info .due-value.zero {
-      color: rgba(255, 255, 255, 0.8);
-      font-weight: 500;
+
+    /* --- NEW: Color classes for card visual --- */
+    .due-value-red {
+      font-weight: 600;
+      color: #ffbaba; /* Light Red */
     }
+    .due-value-green {
+      font-weight: 600;
+      color: #c8e6c9; /* Light Green */
+    }
+    .due-value-neutral {
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.8); /* Neutral */
+    }
+
 
     /* --- Styles for Detail View --- */
     .card-module-body {
@@ -186,7 +192,6 @@
       font-family: 'Poppins', sans-serif;
       cursor: pointer;
       transition: all 0.2s;
-      /* NEW: For icon alignment */
       display: inline-flex;
       align-items: center;
       gap: 4px;
@@ -226,9 +231,10 @@
     .bill-table td { color: #222; }
     .bill-table tr:last-child td { border-bottom: none; }
     .bill-table .amount { font-weight: 600; color: #c62828; }
+    
+    /* MODIFIED: Added style for paid amounts in green */
     .bill-table .paid-amount { font-weight: 600; color: #2e7d32; }
 
-    /* NEW: For attachment links */
     .bill-table a {
       color: #3a3f9d;
       font-weight: 500;
@@ -455,7 +461,6 @@
   let currentUser = null;
   let allCardData = []; // Local cache for data
 
-  // NEW: Element globals
   let cardGridContainer, cardDetailContainer, backToGridLink, backToHomeLink, addNewCardBtn, loadingSpinner, dashboardTitle;
 
   document.addEventListener("DOMContentLoaded", function() {
@@ -466,7 +471,6 @@
     }
     currentUser = JSON.parse(userString);
     
-    // NEW: Get all view elements
     cardGridContainer = document.getElementById('card-grid-container');
     cardDetailContainer = document.getElementById('card-detail-container');
     backToGridLink = document.getElementById('back-to-grid-link');
@@ -475,10 +479,9 @@
     loadingSpinner = document.getElementById('loading-spinner');
     dashboardTitle = document.getElementById('dashboard-title');
     
-    // Initial load
     loadDashboard();
     
-    // --- Modal Event Listeners (Unchanged) ---
+    // --- Modal & Form Listeners (No Changes) ---
     addNewCardBtn.addEventListener('click', () => showModal('add-card-modal'));
     
     document.querySelectorAll('[data-close]').forEach(btn => {
@@ -493,12 +496,10 @@
       });
     });
 
-    // --- Form Submission Handlers (Unchanged) ---
     document.getElementById('add-card-form').addEventListener('submit', handleAddCard);
     document.getElementById('add-bill-form').addEventListener('submit', handleAddBill);
     document.getElementById('add-payment-form').addEventListener('submit', handleAddPayment);
     
-    // --- File Input Name Display (Unchanged) ---
     document.getElementById('bill-attachment').addEventListener('change', (e) => {
       const fileName = e.target.files.length > 0 ? e.target.files[0].name : 'No file selected.';
       document.getElementById('bill-attachment-name').textContent = fileName;
@@ -509,15 +510,12 @@
       document.getElementById('payment-attachment-name').textContent = fileName;
     });
 
-    // --- NEW: View Navigation Listeners ---
     backToGridLink.addEventListener('click', (e) => {
       e.preventDefault();
       showGridView();
     });
 
-    // --- MODIFIED: Dynamic Button Clicks (Event Delegation) ---
-    
-    // Clicks on the card grid (to view details)
+    // --- Event Delegation (No Changes) ---
     cardGridContainer.addEventListener('click', (e) => {
       const cardVisual = e.target.closest('.credit-card-visual');
       if (cardVisual) {
@@ -526,16 +524,13 @@
       }
     });
     
-    // Clicks within the detail view (Add Bill, Mark Paid, Show Details)
     cardDetailContainer.addEventListener('click', (e) => {
-      // Handle "Add Bill" click
       if (e.target.classList.contains('btn-add-bill')) {
         const cardId = e.target.dataset.cardId;
         document.getElementById('bill-card-id').value = cardId;
         showModal('add-bill-modal');
       }
       
-      // Handle "Mark as Paid" click
       if (e.target.classList.contains('btn-mark-paid')) {
         const billId = e.target.dataset.billId;
         const billAmount = e.target.dataset.billAmount;
@@ -544,18 +539,13 @@
         showModal('add-payment-modal');
       }
 
-      // --- NEW: Handle "Show Details" click ---
       if (e.target.classList.contains('btn-show-details')) {
         const encodedData = e.target.dataset.paymentDetails;
         if (encodedData) {
           try {
-            // Decode the Base64 data
             const decodedData = atob(encodedData);
             const paymentData = JSON.parse(decodedData);
-            
-            // Open the details in a new tab
             openPaymentDetailsTab(paymentData);
-
           } catch (err) {
             console.error("Error decoding payment data:", err);
             alert("Could not load payment details.");
@@ -566,7 +556,7 @@
   });
 
   // =================================================================
-  // NEW: VIEW MANAGEMENT FUNCTIONS
+  // VIEW MANAGEMENT FUNCTIONS (No Changes)
   // =================================================================
 
   function showGridView() {
@@ -590,7 +580,7 @@
   }
 
   // =================================================================
-  // MODAL FUNCTIONS (Unchanged)
+  // MODAL FUNCTIONS (No Changes)
   // =================================================================
   
   function showModal(modalId) {
@@ -632,7 +622,7 @@
       
       if (json.status === "success") {
         allCardData = json.data; 
-        renderCardGrid(allCardData); // Render the grid
+        renderCardGrid(allCardData);
       } else {
         showError(json.data?.message || "Could not load data.");
       }
@@ -640,15 +630,12 @@
       showError("Network error: " + err.message);
     } finally {
       showLoading(false);
-      showGridView(); // Show the grid (even if empty)
+      showGridView();
     }
   }
   
-  /**
-    * NEW: Renders the grid of card visuals
-    */
   function renderCardGrid(cards) {
-    cardGridContainer.innerHTML = ''; // Clear existing content
+    cardGridContainer.innerHTML = ''; 
     
     if (!cards || cards.length === 0) {
       cardGridContainer.innerHTML = `<div class="no-bills-message" style="background:var(--card-bg); padding: 30px; font-size: 1rem; grid-column: 1 / -1;">
@@ -659,6 +646,7 @@
     
     let gridHtml = '';
     cards.forEach(card => {
+      // MODIFIED: This function now returns more data
       const summary = calculateCardSummary(card);
       gridHtml += createCardVisual(card, summary);
     });
@@ -666,34 +654,66 @@
   }
 
   /**
-    * NEW: Calculates Total Due and Next Due Date for a card
+    * MODIFIED: Calculates Total Due, Next Due, AND Last Payment
     */
   function calculateCardSummary(card) {
     const pendingBills = card.bills.filter(b => b.status === 'Pending');
+    const paidBills = card.bills.filter(b => b.status === 'Paid');
     
-    if (pendingBills.length === 0) {
-      return { totalDue: 0, earliestDueDate: "No Due found" };
-    }
-    
-    const totalDue = pendingBills.reduce((sum, bill) => sum + parseFloat(bill.amount), 0);
-    
-    // Find the earliest due date
-    const earliestDueDate = pendingBills
-      .map(b => new Date(b.dueDate))
-      .sort((a, b) => a - b)[0]
-      .toISOString().split('T')[0]; // Format as YYYY-MM-DD
+    let totalDue = 0;
+    let earliestDueDate = "No Due found";
+    let lastPayAmount = 0;
+    let lastPayDate = "N/A";
 
-    return { totalDue, earliestDueDate };
+    // Calculate Total Due and Next Due
+    if (pendingBills.length > 0) {
+      totalDue = pendingBills.reduce((sum, bill) => sum + parseFloat(bill.amount), 0);
+      
+      earliestDueDate = pendingBills
+        .map(b => new Date(b.dueDate))
+        .sort((a, b) => a - b)[0]
+        .toISOString().split('T')[0];
+    }
+
+    // Calculate Last Payment
+    if (paidBills.length > 0) {
+      // Sort paid bills by payDate, most recent first
+      const latestPaidBill = paidBills
+        .filter(b => b.payDate) // Ensure payDate exists
+        .sort((a, b) => new Date(b.payDate) - new Date(a.payDate))[0];
+      
+      if (latestPaidBill) {
+        lastPayAmount = parseFloat(latestPaidBill.payAmount);
+        lastPayDate = new Date(latestPaidBill.payDate).toISOString().split('T')[0];
+      }
+    }
+
+    return { totalDue, earliestDueDate, lastPayAmount, lastPayDate };
   }
 
   /**
-    * NEW: Creates just the HTML for the card visual
+    * MODIFIED: Creates the HTML for the card visual with new color-coding
     */
   function createCardVisual(card, summary) {
-    const dueAmountClass = summary.totalDue === 0 ? 'due-value zero' : 'due-value';
-    const dueAmountString = summary.totalDue === 0 ? '₹0.00' : `₹${summary.totalDue.toFixed(2)}`;
-    const dueDateClass = summary.totalDue === 0 ? 'due-value zero' : 'due-value';
     
+    const isDue = summary.totalDue > 0;
+    
+    // Total Due
+    const dueAmountClass = isDue ? 'due-value-red' : 'due-value-neutral';
+    const dueAmountString = `₹${summary.totalDue.toFixed(2)}`;
+    
+    // Next Due
+    const dueDateClass = isDue ? 'due-value-red' : 'due-value-neutral';
+    const dueDateString = summary.earliestDueDate;
+
+    // Last Pay Amount
+    const lastPayAmountClass = summary.lastPayAmount > 0 ? 'due-value-green' : 'due-value-neutral';
+    const lastPayAmountString = `₹${summary.lastPayAmount.toFixed(2)}`;
+    
+    // Last Pay Date
+    const lastPayDateClass = summary.lastPayAmount > 0 ? 'due-value-green' : 'due-value-neutral';
+    const lastPayDateString = summary.lastPayDate;
+
     return `
       <div class="credit-card-visual" data-card-id="${card.id}">
         <div>
@@ -703,6 +723,7 @@
           <div class="card-number">•••• ${card.last4}</div>
           <div class="card-name">${card.nameOnCard}</div>
         </div>
+        
         <div class="card-due-info">
           <div>
             <span class="due-label">Total Due</span>
@@ -710,7 +731,15 @@
           </div>
           <div>
             <span class="due-label">Next Due</span>
-            <div class="${dueDateClass}">${summary.earliestDueDate}</div>
+            <div class="${dueDateClass}">${dueDateString}</div>
+          </div>
+          <div>
+            <span class="due-label">Last Pay Amt</span>
+            <div class="${lastPayAmountClass}">${lastPayAmountString}</div>
+          </div>
+          <div>
+            <span class="due-label">Last Pay Date</span>
+            <div class="${lastPayDateClass}">${lastPayDateString}</div>
           </div>
         </div>
       </div>
@@ -718,7 +747,7 @@
   }
 
   /**
-    * NEW: Renders the full detail view for a single card
+    * Renders the full detail view for a single card
     */
   function renderCardDetail(cardId) {
     const card = allCardData.find(c => c.id === cardId);
@@ -728,17 +757,16 @@
     }
     
     cardDetailContainer.innerHTML = createCardDetailModule(card);
-    showDetailView(card.issuer); // Show detail view and update title
+    showDetailView(card.issuer);
   }
   
   /**
-    * MODIFIED: Creates the *detail* module.
+    * Creates the *detail* module.
     */
   function createCardDetailModule(card) {
-    // --- MODIFIED: Get ALL bills, not just pending ---
     const allBills = card.bills;
     
-    // Use the *same* visual from the grid
+    // Get the SAME summary data for the card visual
     const summary = calculateCardSummary(card);
     const cardVisualHtml = createCardVisual(card, summary);
     
@@ -759,21 +787,19 @@
             </div>
             ${renderBillTable(allBills)}
           </div>
-          
-          </div>
+        </div>
       </div>
     `;
   }
   
   /**
-    * MODIFIED: Renders the HTML for a single bill table with dynamic actions
+    * MODIFIED: Renders the bill table with color-coded amounts
     */
   function renderBillTable(bills) {
     if (bills.length === 0) {
       return `<div class="no-bills-message">No bills found for this card.</div>`;
     }
     
-    // --- MODIFIED: New headers including Bill Attachment ---
     let headers = `
       <th>Bill #</th>
       <th>Bill Date</th>
@@ -783,24 +809,26 @@
       <th>Actions</th>`;
     
     const rows = bills.map(bill => {
-      // Format dates
       const billDate = bill.billDate ? new Date(bill.billDate).toISOString().split('T')[0] : 'N/A';
       const dueDate = bill.dueDate ? new Date(bill.dueDate).toISOString().split('T')[0] : 'N/A';
 
-      // --- NEW: Create Bill Attachment Link ---
       const billAttachmentLink = (bill.billAttachmentURL && bill.billAttachmentURL.startsWith('http'))
         ? `<a href="${bill.billAttachmentURL}" target="_blank">View Bill</a>`
         : 'N/A';
       
-      // --- NEW: Dynamic Action Button ---
       let actionButton = '';
+      
+      // --- MODIFIED: Determine amount class based on status ---
+      let amountClass = 'amount'; // Default to red (pending)
+      
       if (bill.status === 'Pending') {
-        // If pending, show "Mark as Paid" button
         actionButton = `<button class="btn-paid btn-mark-paid" data-bill-id="${bill.id}" data-bill-amount="${bill.amount}">
                           Mark as Paid
                         </button>`;
       } else { 
-        // If paid, show "Paid - Show Details" button
+        // Bill is 'Paid'
+        amountClass = 'paid-amount'; // Change class to green
+        
         const paymentData = {
           billNumber: bill.billNumber,
           txnNo: bill.txnNo,
@@ -810,7 +838,6 @@
           paymentAttachmentURL: bill.paymentAttachmentURL
         };
         
-        // Encode the data to Base64 to safely pass in a data attribute
         const encodedPaymentData = btoa(JSON.stringify(paymentData)); 
 
         actionButton = `<button class="btn-secondary btn-show-details" data-payment-details="${encodedPaymentData}">
@@ -818,13 +845,12 @@
                         </button>`;
       }
 
-      // --- MODIFIED: Return the new row structure ---
       return `
         <tr>
           <td>${bill.billNumber}</td>
           <td>${billDate}</td>
           <td>${dueDate}</td>
-          <td class="amount">₹${parseFloat(bill.amount).toFixed(2)}</td>
+          <td class="${amountClass}">₹${parseFloat(bill.amount).toFixed(2)}</td>
           <td>${billAttachmentLink}</td>
           <td>${actionButton}</td>
         </tr>
@@ -839,14 +865,10 @@
     `;
   }
   
-  /**
-    * MODIFIED: Show/hide spinner and containers
-    */
   function showLoading(isLoading) {
     if (loadingSpinner) {
       loadingSpinner.style.display = isLoading ? 'block' : 'none';
     }
-    // Hide containers when loading
     if (isLoading) {
       cardGridContainer.style.display = 'none';
       cardDetailContainer.style.display = 'none';
@@ -859,7 +881,7 @@
   }
 
   // =================================================================
-  // FORM HANDLERS (Sending data) - (Unchanged)
+  // FORM HANDLERS (Sending data) - (No Changes)
   // =================================================================
 
   async function handleAddCard(e) {
@@ -888,7 +910,7 @@
       
       if (json.status === "success") {
         closeModal('add-card-modal');
-        loadDashboard(); // Refresh
+        loadDashboard();
       } else {
         alert("Error: " + (json.data?.message || "Could not save card."));
       }
@@ -931,145 +953,4 @@
     };
     
     try {
-      const res = await fetch(SCRIPT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(payload)
-      });
-      const json = await res.json();
-      
-      if (json.status === "success") {
-        closeModal('add-bill-modal');
-        // REFRESH: Re-load all data and show the grid
-        loadDashboard();
-      } else {
-        alert("Error: " + (json.data?.message || "Could not save bill."));
-      }
-    } catch (err) {
-      alert("Network Error: " + err.message);
-    } finally {
-      btn.disabled = false;
-      btn.textContent = "Save Bill";
-    }
-  }
-  
-  async function handleAddPayment(e) {
-    e.preventDefault();
-    const btn = document.getElementById('save-payment-btn');
-    btn.disabled = true;
-    btn.textContent = "Saving...";
-    
-    const fileInput = document.getElementById('payment-attachment');
-    let attachmentData = null;
-    if (fileInput.files.length > 0) {
-      const file = fileInput.files[0];
-      attachmentData = {
-        filename: file.name,
-        mimeType: file.type,
-        data: await fileToBase64(file)
-      };
-    }
-    
-    const payload = {
-      action: "markBillPaid",
-      params: {
-        billId: document.getElementById('payment-bill-id').value,
-        txnNo: document.getElementById('payment-txn-no').value,
-        payDate: document.getElementById('payment-date').value,
-        payAmount: parseFloat(document.getElementById('payment-amount').value),
-        paidBy: currentUser.name,
-        attachment: attachmentData
-      }
-    };
-    
-    try {
-      const res = await fetch(SCRIPT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(payload)
-      });
-      const json = await res.json();
-      
-      if (json.status === "success") {
-        closeModal('add-payment-modal');
-        // REFRESH: Re-load all data and show the grid
-        loadDashboard();
-      } else {
-        alert("Error: " + (json.data?.message || "Could not save payment."));
-      }
-    } catch (err) {
-      alert("Network Error: " + err.message);
-    } finally {
-      btn.disabled = false;
-      btn.textContent = "Save Payment";
-    }
-  }
-  
-  /**
-    * Helper function to convert a file to a Base64 string (Unchanged)
-    */
-  function fileToBase64(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        const base64String = reader.result.split(',')[1];
-        resolve(base64String);
-      };
-      reader.onerror = error => reject(error);
-    });
-  }
-
-  // =================================================================
-  // --- NEW: FUNCTION TO OPEN PAYMENT DETAILS IN A NEW TAB ---
-  // =================================================================
-
-  function openPaymentDetailsTab(data) {
-    const attachmentHtml = (data.paymentAttachmentURL && data.paymentAttachmentURL.startsWith('http'))
-        ? `<p><a href="${data.paymentAttachmentURL}" target="_blank" style="font-size: 1.2rem; color: #0056b3;">View Payment Attachment</a></p>`
-        : '<p>No payment attachment found.</p>';
-
-    const htmlContent = `
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <title>Payment Details - ${data.billNumber}</title>
-            <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-            <style>
-                body { font-family: 'Poppins', sans-serif; background: #f4f7fa; padding: 40px; color: #333; }
-                .container { max-width: 800px; margin: 0 auto; background: #fff; border-radius: 12px; box-shadow: 0 6px 18px rgba(0,0,0,0.06); padding: 32px; }
-                h1 { color: #3a3f9d; border-bottom: 2px solid #e9eef2; padding-bottom: 16px; margin-bottom: 24px; }
-                .detail-grid { display: grid; grid-template-columns: 200px 1fr; gap: 16px; }
-                .detail-grid strong { font-weight: 600; color: #555; }
-                .detail-grid span { font-weight: 500; color: #111; }
-                p { line-height: 1.6; }
-                a { color: #0056b3; text-decoration: none; }
-                a:hover { text-decoration: underline; }
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <h1>Payment Details</h1>
-                <div class="detail-grid">
-                    <strong>Bill Number:</strong>       <span>${data.billNumber || 'N/A'}</span>
-                    <strong>Transaction No:</strong> <span>${data.txnNo || 'N/A'}</span>
-                    <strong>Payment Date:</strong>     <span>${data.payDate || 'N/A'}</span>
-                    <strong>Payment Amount:</strong>   <span>₹${data.payAmount || '0.00'}</span>
-                    <strong>Paid By:</strong>          <span>${data.paidBy || 'N/A'}</span>
-                </div>
-                <hr style="border: 0; border-top: 1px solid #e9eef2; margin: 24px 0;">
-                ${attachmentHtml}
-            </div>
-        </body>
-        </html>
-    `;
-    
-    const newTab = window.open();
-    newTab.document.write(htmlContent);
-    newTab.document.close();
-  }
-  
-</script>
-</body>
-</html>
+      const res = await fetch(SCRIPT_URL,. ...
