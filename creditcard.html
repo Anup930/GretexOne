@@ -1,5 +1,3 @@
-<!-- V 3.1.4 -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -729,28 +727,8 @@
       showGridView();
     });
 
-    // --- ***** MODIFIED: Dynamic Button Clicks ***** ---
-    // cardGridContainer.addEventListener('click', (e) => {
-    //   // View Card Detail
-    //   const cardVisual = e.target.closest('.credit-card-visual');
-    //   if (cardVisual) {
-    //     // Prevent click if clicking the "Mark Done" button
-    //     if (e.target.closest('.btn-mark-renewal-done')) return; 
-        
-    //     const cardId = cardVisual.dataset.cardId;
-    //     renderCardDetail(cardId);
-    //   }
-      
-    //   // Mark Renewal Done
-    //   const renewalBtn = e.target.closest('.btn-mark-renewal-done');
-    //   if (renewalBtn) {
-    //     renewalBtn.disabled = true;
-    //     renewalBtn.textContent = "Updating...";
-    //     handleMarkRenewalDone(renewalBtn.dataset.cardId, renewalBtn.dataset.year);
-    //   }
-    // });
 
-    // --- ***** MODIFIED: Dynamic Button Clicks (FIXED) ***** ---
+    // --- ***** THIS IS THE CORRECTED FUNCTION ***** ---
     cardGridContainer.addEventListener('click', (e) => {
       // --- FIX: Check for the button click *first* ---
       const renewalBtn = e.target.closest('.btn-mark-renewal-done');
@@ -770,6 +748,8 @@
         renderCardDetail(cardId);
       }
     });
+    // --- ***** END OF CORRECTED FUNCTION ***** ---
+
     
     // Clicks inside the Detail container
     cardDetailContainer.addEventListener('click', (e) => {
@@ -1051,11 +1031,6 @@
     }
   }
   
-  // function showError(message) {
-  //   alert("Error: "D + message);
-  //   cardGridContainer.innerHTML = `<div class="no-bills-message" style="background:#fff8f8; color: #c00; grid-column: 1 / -1;">${message}</div>`;
-  // }
-
   function showError(message) {
     alert("Error: " + message); // This line is now fixed
     cardGridContainer.innerHTML = `<div class="no-bills-message" style="background:#fff8f8; color: #c00; grid-column: 1 / -1;">${message}</div>`;
