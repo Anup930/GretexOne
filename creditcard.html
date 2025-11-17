@@ -1,4 +1,4 @@
-<!-- V 2.1.9 -->
+<!-- V 3.0.1 -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -408,7 +408,71 @@
     }
     
   </style>
-</head>
+
+  <style>
+    /* --- New Styles for Card Visual --- */
+    .card-top-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    
+    .card-renewal {
+      text-align: right;
+    }
+    
+    .card-renewal .due-label {
+      font-weight: 300;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .card-renewal .due-value {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    /* --- New Styles for Spend Info Section --- */
+    .spend-info-section {
+      margin-bottom: 24px;
+      background: #fdfdff;
+      border: 1px solid #eef2f7;
+      border-radius: 12px;
+      padding: 20px 32px;
+    }
+
+    .spend-info-section h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .spend-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .spend-grid > div {
+      background: #f9faff;
+      padding: 16px;
+      border-radius: 8px;
+    }
+
+    .spend-grid span {
+      display: block;
+      font-size: 13px;
+      color: #555;
+      margin-bottom: 6px;
+    }
+
+    .spend-grid strong {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--purple-1);
+    }
+  </style>
+  </head>
 <body>
 
   <div class="sidebar">
@@ -416,10 +480,10 @@
       <h2>Gretex One</h2>
       <div id="user-name">Loading...</div>
     </div>
-  
+ 
     <ul id="nav-links-list" class="nav-links">
       </ul>
-  
+ 
     <div class="sidebar-footer">
       <button id="logout-button">
         <span class="material-icons-outlined">logout</span>
@@ -431,9 +495,9 @@
   <div class="main-content">
 
     <a href="#" class="back-link" id="back-to-grid-link" style="display: none;">← Back to All Cards</a>
-  
+ 
     <div class="app-content">
-      
+       
       <div class="dashboard-header">
         <h1 id="dashboard-title">Credit Card Management</h1>
         <button class="btn-primary" id="add-new-card-btn">
@@ -441,20 +505,23 @@
           Add New Card
         </button>
       </div>
-      
+       
       <div id="card-grid-container">
         </div>
-  
+ 
       <div id="card-detail-container">
         </div>
-  
+ 
       <div id="loading-spinner" class="loading-spinner">Loading your card dashboard...</div>
-      
+       
     </div>
 
-  </div> <div class="modal-overlay" id="add-card-modal">
+  </div> 
+
+  <div class="modal-overlay" id="add-card-modal">
     <div class="modal-content">
       <h2>Add New Credit Card</h2>
+      
       <form id="add-card-form">
         <div class="form-group">
           <label for="card-issuer">Card Issuer (e.g., HDFC Bank)</label>
@@ -468,12 +535,21 @@
           <label for="card-name">Name on Card</label>
           <input type="text" id="card-name" required>
         </div>
+        
+        <div class="form-group">
+          <label for="card-renewal-date">Renewal Date (MM-DD)</label>
+          <input type="text" id="card-renewal-date" placeholder="e.g., 08-25" pattern="\d{2}-\d{2}" title="Use MM-DD format" required>
+        </div>
+        <div class="form-group">
+          <label for="card-min-spend">Annual Min. Spend (for fee waiver)</label>
+          <input type="number" id="card-min-spend" step="1000" placeholder="e.g., 200000" required>
+        </div>
         <div class="modal-actions">
           <button type="button" class="btn-secondary" data-close="add-card-modal">Cancel</button>
           <button type="submit" class="btn-primary" id="save-card-btn">Save Card</button>
         </div>
       </form>
-    </div>
+      </div>
   </div>
 
   <div class="modal-overlay" id="add-bill-modal">
@@ -551,6 +627,42 @@
   let allCardData = []; 
 
   let cardGridContainer, cardDetailContainer, backToGridLink, addNewCardBtn, loadingSpinner, dashboardTitle;
+
+  // ***** NEW HELPER FUNCTION *****
+  /**
+   * Helper function to get the next renewal date.
+   */
+  function getNextRenewalDate(mm_dd) {
+    if (!mm_dd || !mm_dd.match(/^\d{2}-\d{2}$/)) {
+      return 'N/A';
+    }
+    
+    const [month, day] = mm_dd.split('-').map(Number);
+    if (isNaN(month) || isNaN(day)) {
+      return 'N/A';
+    }
+
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    
+    // Set time to 00:00:00 to avoid off-by-one errors
+    today.setHours(0, 0, 0, 0); 
+    
+    let renewalDateThisYear = new Date(currentYear, month - 1, day);
+    let nextRenewalDate;
+
+    if (renewalDateThisYear < today) {
+      // If the date has already passed this year, the next renewal is next year
+      nextRenewalDate = new Date(currentYear + 1, month - 1, day);
+    } else {
+      // Otherwise, the next renewal is this year
+      nextRenewalDate = renewalDateThisYear;
+    }
+
+    return nextRenewalDate.toISOString().split('T')[0];
+  }
+  // ***** END NEW HELPER FUNCTION *****
+
 
   // === MODIFIED: Merged 'access.html' JS with 'Craditcard.html' JS ===
   document.addEventListener("DOMContentLoaded", function() {
@@ -768,8 +880,8 @@
   }
   
   /**
-    * Renders the grid of card visuals
-    */
+   * Renders the grid of card visuals
+   */
   function renderCardGrid(cards) {
     cardGridContainer.innerHTML = ''; // Clear existing content
     
@@ -789,8 +901,8 @@
   }
 
   /**
-    * Calculates Total Due and Next Due Date for a card
-    */
+   * Calculates Total Due and Next Due Date for a card
+   */
   function calculateCardSummary(card) {
     const pendingBills = card.bills.filter(b => b.status === 'Pending');
     
@@ -809,18 +921,27 @@
   }
 
   /**
-    * Creates just the HTML for the card visual
-    */
+   * Creates just the HTML for the card visual
+   */
   function createCardVisual(card, summary) {
     const dueAmountClass = summary.totalDue === 0 ? 'due-value zero' : 'due-value';
     const dueAmountString = summary.totalDue === 0 ? '₹0.00' : `₹${summary.totalDue.toFixed(2)}`;
     const dueDateClass = summary.totalDue === 0 ? 'due-value zero' : 'due-value';
     
+    // NEW: Get next renewal date
+    const nextRenewal = getNextRenewalDate(card.renewalDate);
+    
     return `
       <div class="credit-card-visual" data-card-id="${card.id}">
-        <div>
+        
+        <div class="card-top-info">
           <div class="card-issuer">${card.issuer}</div>
+          <div class="card-renewal">
+            <span class="due-label">Next Renewal</span>
+            <div class="due-value">${nextRenewal}</div>
+          </div>
         </div>
+        
         <div>
           <div class="card-number">•••• ${card.last4}</div>
           <div class="card-name">${card.nameOnCard}</div>
@@ -840,8 +961,8 @@
   }
 
   /**
-    * Renders the full detail view for a single card
-    */
+   * Renders the full detail view for a single card
+   */
   function renderCardDetail(cardId) {
     const card = allCardData.find(c => c.id === cardId);
     if (!card) {
@@ -854,13 +975,36 @@
   }
   
   /**
-    * Creates the *detail* module.
-    */
+   * Creates the *detail* module.
+   */
   function createCardDetailModule(card) {
     const allBills = card.bills;
     
     const summary = calculateCardSummary(card);
     const cardVisualHtml = createCardVisual(card, summary);
+    
+    // NEW: Calculate spend info
+    const annualSpend = parseFloat(card.minSpend) || 0;
+    const monthlySpend = (annualSpend / 12);
+    
+    let spendHtml = '';
+    if (annualSpend > 0) {
+      spendHtml = `
+        <div class="spend-info-section">
+          <h3>Spend Targets</h3>
+          <div class="spend-grid">
+            <div>
+              <span>Annual Min. Spend</span>
+              <strong>₹${annualSpend.toLocaleString('en-IN')}</strong>
+            </div>
+            <div>
+              <span>Est. Monthly Spend</span>
+              <strong>₹${monthlySpend.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</strong>
+            </div>
+          </div>
+        </div>
+      `;
+    }
     
     return `
       <div class="card-module">
@@ -869,6 +1013,9 @@
         </div>
         
         <div class="card-module-body">
+          
+          ${spendHtml}
+          
           <div class="bill-section">
             <div class="bill-section-header">
               <h3>Bills</h3>
@@ -886,8 +1033,8 @@
   }
   
   /**
-    * Renders the HTML for a single bill table with dynamic actions
-    */
+   * Renders the HTML for a single bill table with dynamic actions
+   */
   function renderBillTable(bills) {
     if (bills.length === 0) {
       return `<div class="no-bills-message">No bills found for this card.</div>`;
@@ -952,8 +1099,8 @@
   }
   
   /**
-    * Show/hide spinner and containers
-    */
+   * Show/hide spinner and containers
+   */
   function showLoading(isLoading) {
     if (loadingSpinner) {
       loadingSpinner.style.display = isLoading ? 'block' : 'none';
@@ -985,7 +1132,9 @@
         issuer: document.getElementById('card-issuer').value,
         last4: document.getElementById('card-last-4').value,
         nameOnCard: document.getElementById('card-name').value,
-        addedBy: currentUser.name
+        addedBy: currentUser.name,
+        renewalDate: document.getElementById('card-renewal-date').value, // NEW
+        minSpend: parseFloat(document.getElementById('card-min-spend').value) // NEW
       }
     };
     
@@ -1115,8 +1264,8 @@
   }
   
   /**
-    * Helper function to convert a file to a Base64 string
-    */
+   * Helper function to convert a file to a Base64 string
+   */
   function fileToBase64(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
