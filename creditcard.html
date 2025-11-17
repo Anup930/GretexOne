@@ -750,20 +750,22 @@
     //   }
     // });
 
-    // --- ***** MODIFIED: Dynamic Button Clicks ***** ---
+    // --- ***** MODIFIED: Dynamic Button Clicks (FIXED) ***** ---
     cardGridContainer.addEventListener('click', (e) => {
       // --- FIX: Check for the button click *first* ---
       const renewalBtn = e.target.closest('.btn-mark-renewal-done');
       if (renewalBtn) {
+        // If the button was clicked, handle it and stop
         renewalBtn.disabled = true;
         renewalBtn.textContent = "Updating...";
         handleMarkRenewalDone(renewalBtn.dataset.cardId, renewalBtn.dataset.year);
-        return; // Stop processing the click
+        return; 
       }
 
-      // If the button wasn't clicked, check if the card was
+      // If the button was *not* clicked, check if the card was
       const cardVisual = e.target.closest('.credit-card-visual');
       if (cardVisual) {
+        // If the card was clicked, open it
         const cardId = cardVisual.dataset.cardId;
         renderCardDetail(cardId);
       }
