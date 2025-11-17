@@ -1,3 +1,5 @@
+<!-- V 3.1.9 -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,15 +23,16 @@
     
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
+    /* === NEW: Layout styles from access.html === */
     body {
       font-family: 'Poppins', sans-serif;
-      background: #f4f7fa;
+      background: #f4f7fa; /* Cleaner background */
       color: #333;
       display: flex;
       min-height: 100vh;
     }
 
-    /* --- Sidebar --- */
+    /* === NEW: Sidebar styles from access.html === */
     .sidebar {
       flex-basis: 260px;
       flex-shrink: 0;
@@ -39,6 +42,7 @@
       flex-direction: column;
       padding: 25px 20px;
     }
+    
     .sidebar-header {
       text-align: left;
       margin-bottom: 30px;
@@ -46,9 +50,12 @@
       padding-left: 10px;
       border-bottom: 1px solid #e9eef2;
     }
+    
     .sidebar-header h2 { font-size: 1.4rem; font-weight: 600; color: #3b439c; }
     #user-name { font-size: 0.9rem; font-weight: 500; color: #555; margin-top: 8px; }
+    
     .nav-links { flex-grow: 1; list-style: none; margin: 0; padding: 0; }
+    
     .nav-links li a {
       display: flex;
       align-items: center;
@@ -61,19 +68,24 @@
       color: #4a5568;
       transition: all 0.2s ease-in-out;
     }
+    
     .nav-links li a:hover {
       background-color: #f4f7fa;
       color: #3b439c;
     }
+
     .nav-links li a.active {
       background-color: #3b439c;
       color: #ffffff;
       font-weight: 600;
       box-shadow: 0 5px 15px -5px rgba(59, 67, 156, 0.4);
     }
+    
     .nav-links li a .material-icons { font-size: 22px; }
     .nav-links li a.active .material-icons { color: #ffffff; }
+
     .sidebar-footer { margin-top: 20px; }
+    
     #logout-button {
       width: 100%;
       padding: 14px 20px;
@@ -90,17 +102,20 @@
       gap: 12px;
       transition: background-color 0.2s;
     }
+    
     #logout-button:hover { background: #f8d7da; }
     #logout-button .material-icons-outlined { font-size: 22px; }
 
-    /* --- Main Content --- */
+    /* === NEW: Main Content styles from access.html === */
     .main-content {
       flex-grow: 1;
       padding: 40px;
       overflow-y: auto;
     }
 
-    /* --- Page-Specific Styles --- */
+    /* === Page-Specific Styles (Mostly Unchanged) === */
+    
+    /* MODIFIED: Removed margin-bottom, as it's now in .main-content */
     .back-link {
       font-size: 1rem;
       text-decoration: none;
@@ -116,17 +131,21 @@
       max-width: 1200px;
       margin: 0 auto;
     }
+
     .dashboard-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 24px;
+      /* NEW: Add margin-top to separate from back link */
       margin-top: 20px; 
     }
+    
     .dashboard-header h1 {
       font-size: 1.8rem;
       font-weight: 600;
     }
+    
     .btn-primary {
       background: linear-gradient(90deg, var(--purple-2), var(--purple-1));
       color: #fff;
@@ -147,14 +166,17 @@
       box-shadow: 0 8px 20px rgba(59, 67, 156, 0.3);
       transform: translateY(-2px);
     }
+    
     #card-grid-container {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 32px;
     }
+
     #card-detail-container {
       display: none;
     }
+    
     .loading-spinner {
       text-align: center;
       padding: 50px;
@@ -162,18 +184,19 @@
       color: #555;
     }
     
-    /* --- Card Module --- */
     .card-module {
       background: var(--card-bg);
       border-radius: 16px;
       box-shadow: var(--shadow-med);
       overflow: hidden;
     }
+    
     .card-module-header {
       padding: 24px 32px;
       background: linear-gradient(135deg, #fafbff, #f8f9ff);
       border-bottom: 1px solid #e9eef2;
     }
+    
     .credit-card-visual {
       width: 300px;
       height: 180px;
@@ -192,9 +215,11 @@
       transform: translateY(-4px);
       box-shadow: 0 14px 35px rgba(50, 60, 140, 0.4);
     }
+    
     .card-issuer { font-size: 1.2rem; font-weight: 600; }
     .card-number { font-size: 1.1rem; letter-spacing: 2px; font-family: monospace; }
     .card-name { font-size: 0.9rem; font-weight: 500; text-transform: uppercase; }
+
     .card-due-info {
       margin-top: 10px;
       padding-top: 10px;
@@ -215,11 +240,11 @@
       color: rgba(255, 255, 255, 0.8);
       font-weight: 500;
     }
+
     .card-module-body {
       padding: 24px 32px;
     }
     
-    /* --- Bill Section --- */
     .bill-section { margin-bottom: 24px; }
     .bill-section-header {
       display: flex;
@@ -228,6 +253,7 @@
       margin-bottom: 16px;
     }
     .bill-section-header h3 { font-size: 1.2rem; font-weight: 600; }
+    
     .btn-secondary {
       background: #eef2f7;
       color: #333;
@@ -244,6 +270,7 @@
       gap: 4px;
     }
     .btn-secondary:hover { background: #e4e9ef; }
+    
     .btn-paid {
       background: #e0f2f1;
       color: #00695c;
@@ -257,6 +284,7 @@
       transition: all 0.2s;
     }
     .btn-paid:hover { background: #c8e6c9; }
+    
     .bill-table {
       width: 100%;
       border-collapse: collapse;
@@ -277,6 +305,7 @@
     .bill-table tr:last-child td { border-bottom: none; }
     .bill-table .amount { font-weight: 600; color: #c62828; }
     .bill-table .paid-amount { font-weight: 600; color: #2e7d32; }
+
     .bill-table a {
       color: #3a3f9d;
       font-weight: 500;
@@ -285,6 +314,7 @@
     .bill-table a:hover {
       text-decoration: underline;
     }
+
     .no-bills-message {
       padding: 20px;
       text-align: center;
@@ -293,7 +323,7 @@
       border-radius: 8px;
     }
     
-    /* --- Modal Styles --- */
+    /* --- Modal Styles (Unchanged) --- */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -311,6 +341,7 @@
       opacity: 1;
       visibility: visible;
     }
+    
     .modal-content {
       background: #fff;
       border-radius: 12px;
@@ -324,11 +355,13 @@
     .modal-overlay.visible .modal-content {
       transform: translateY(0);
     }
+    
     .modal-content h2 {
       font-size: 1.5rem;
       font-weight: 600;
       margin-bottom: 20px;
     }
+    
     .form-group {
       margin-bottom: 16px;
     }
@@ -356,12 +389,17 @@
       border-color: var(--purple-2);
       box-shadow: 0 0 0 3px rgba(91, 111, 224, 0.2);
     }
+    
+    .form-group .file-upload-wrapper {
+      position: relative;
+    }
     .form-group .file-name {
       font-size: 13px;
       color: #555;
       margin-top: 8px;
       font-style: italic;
     }
+    
     .modal-actions {
       display: flex;
       justify-content: flex-end;
@@ -370,87 +408,7 @@
     }
     
   </style>
-
-  <style>
-    .card-top-info {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-    }
-    .card-renewal {
-      text-align: right;
-    }
-    .card-renewal .due-label {
-      font-weight: 300;
-      font-size: 0.8rem;
-      color: rgba(255, 255, 255, 0.7);
-    }
-    .card-renewal .due-value {
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-
-    /* --- New Renewal Button --- */
-    .card-renewal-action {
-      margin-top: 8px;
-    }
-    .btn-mark-renewal-done {
-      background: #ffeb3b;
-      color: #333;
-      border: none;
-      border-radius: 4px;
-      padding: 4px 8px;
-      font-size: 11px;
-      font-weight: 600;
-      font-family: 'Poppins', sans-serif;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .btn-mark-renewal-done:hover {
-      background: #fdd835;
-    }
-    .btn-mark-renewal-done:disabled {
-      background: #9e9e9e;
-      cursor: not-allowed;
-    }
-
-
-    /* --- Spend Info Section --- */
-    .spend-info-section {
-      margin-bottom: 24px;
-      background: #fdfdff;
-      border: 1px solid #eef2f7;
-      border-radius: 12px;
-      padding: 20px 32px;
-    }
-    .spend-info-section h3 {
-      font-size: 1.2rem;
-      font-weight: 600;
-      margin-bottom: 16px;
-    }
-    .spend-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-    .spend-grid > div {
-      background: #f9faff;
-      padding: 16px;
-      border-radius: 8px;
-    }
-    .spend-grid span {
-      display: block;
-      font-size: 13px;
-      color: #555;
-      margin-bottom: 6px;
-    }
-    .spend-grid strong {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: var(--purple-1);
-    }
-  </style>
-  </head>
+</head>
 <body>
 
   <div class="sidebar">
@@ -458,7 +416,10 @@
       <h2>Gretex One</h2>
       <div id="user-name">Loading...</div>
     </div>
-    <ul id="nav-links-list" class="nav-links"></ul>
+  
+    <ul id="nav-links-list" class="nav-links">
+      </ul>
+  
     <div class="sidebar-footer">
       <button id="logout-button">
         <span class="material-icons-outlined">logout</span>
@@ -470,9 +431,9 @@
   <div class="main-content">
 
     <a href="#" class="back-link" id="back-to-grid-link" style="display: none;">← Back to All Cards</a>
- 
+  
     <div class="app-content">
-       
+      
       <div class="dashboard-header">
         <h1 id="dashboard-title">Credit Card Management</h1>
         <button class="btn-primary" id="add-new-card-btn">
@@ -480,19 +441,20 @@
           Add New Card
         </button>
       </div>
-       
-      <div id="card-grid-container"></div>
-      <div id="card-detail-container"></div>
+      
+      <div id="card-grid-container">
+        </div>
+  
+      <div id="card-detail-container">
+        </div>
+  
       <div id="loading-spinner" class="loading-spinner">Loading your card dashboard...</div>
-       
+      
     </div>
 
-  </div> 
-
-  <div class="modal-overlay" id="add-card-modal">
+  </div> <div class="modal-overlay" id="add-card-modal">
     <div class="modal-content">
       <h2>Add New Credit Card</h2>
-      
       <form id="add-card-form">
         <div class="form-group">
           <label for="card-issuer">Card Issuer (e.g., HDFC Bank)</label>
@@ -505,14 +467,6 @@
         <div class="form-group">
           <label for="card-name">Name on Card</label>
           <input type="text" id="card-name" required>
-        </div>
-        <div class="form-group">
-          <label for="card-renewal-date">Renewal Date (MM-DD)</label>
-          <input type="text" id="card-renewal-date" placeholder="e.g., 08-25" pattern="\d{2}-\d{2}" title="Use MM-DD format" required>
-        </div>
-        <div class="form-group">
-          <label for="card-min-spend">Annual Min. Spend (for fee waiver)</label>
-          <input type="number" id="card-min-spend" step="1000" placeholder="e.g., 200000" required>
         </div>
         <div class="modal-actions">
           <button type="button" class="btn-secondary" data-close="add-card-modal">Cancel</button>
@@ -598,55 +552,7 @@
 
   let cardGridContainer, cardDetailContainer, backToGridLink, addNewCardBtn, loadingSpinner, dashboardTitle;
 
-  // ***** MODIFIED HELPER FUNCTION *****
-  /**
-   * Helper function to get the next renewal date and check if it's due.
-   * @param {string} mm_dd - The renewal date in "MM-DD" format.
-   * @param {string} lastRenewalYear - The year it was last renewed.
-   * @returns {object} { nextRenewal: "YYYY-MM-DD", isDue: boolean, renewalYearToMark: number }
-   */
-  function getNextRenewalDate(mm_dd, lastRenewalYear) {
-    if (!mm_dd || !mm_dd.match(/^\d{2}-\d{2}$/)) {
-      return { nextRenewal: 'N/A', isDue: false, renewalYearToMark: 0 };
-    }
-    
-    const lastYear = parseInt(lastRenewalYear) || 0;
-    
-    const [month, day] = mm_dd.split('-').map(Number);
-    if (isNaN(month) || isNaN(day)) {
-      return { nextRenewal: 'N/A', isDue: false, renewalYearToMark: 0 };
-    }
-
-    const today = new Date();
-    const currentYear = today.getFullYear();
-    today.setHours(0, 0, 0, 0); 
-    
-    const renewalDateThisYear = new Date(currentYear, month - 1, day);
-    let nextRenewalDate;
-
-    if (lastYear === currentYear) {
-      // Already renewed this year, next one is next year.
-      nextRenewalDate = new Date(currentYear + 1, month - 1, day);
-    } else if (renewalDateThisYear < today) {
-      // Not renewed this year, and date has passed. It's "overdue".
-      nextRenewalDate = renewalDateThisYear;
-    } else {
-      // Not renewed this year, and date is upcoming.
-      nextRenewalDate = renewalDateThisYear;
-    }
-
-    // Check if a renewal is due: (Next renewal is today or in the past) AND (it hasn't been done this year)
-    const isDue = (nextRenewalDate <= today) && (lastYear !== nextRenewalDate.getFullYear());
-    
-    return {
-      nextRenewal: nextRenewalDate.toISOString().split('T')[0],
-      isDue: isDue,
-      renewalYearToMark: nextRenewalDate.getFullYear() // The year we will mark as "done"
-    };
-  }
-  // ***** END MODIFIED HELPER FUNCTION *****
-
-
+  // === MODIFIED: Merged 'access.html' JS with 'Craditcard.html' JS ===
   document.addEventListener("DOMContentLoaded", function() {
     const userString = sessionStorage.getItem("gretexUser");
     if (!userString) {
@@ -655,14 +561,18 @@
     }
     currentUser = JSON.parse(userString);
     
-    // --- Sidebar Population Logic ---
+    // === NEW: Sidebar Population Logic (from access.html) ===
     document.getElementById("user-name").innerText = (currentUser && currentUser.name) ? currentUser.name : "User";
+    
     const appMap = {
       "App1_CreditCard": { name: "Credit Card", page: "creditcard", icon: "credit_card" },
       "App2_Bills": { name: "Bills", page: "bills", icon: "receipt_long" },
       "App3_MobileBills": { name: "Mobile Bills", page: "mobilebills", icon: "phone_android" }
     };
+    
     const navLinksList = document.getElementById("nav-links-list");
+
+    // Create and append Home link first (now NOT active)
     const homeLink = document.createElement("li");
     homeLink.innerHTML = `<a href="App_access.html"><span class="material-icons">home</span> Home</a>`;
     navLinksList.appendChild(homeLink);
@@ -671,20 +581,27 @@
       currentUser.apps.forEach(appKey => {
         const app = appMap[appKey];
         if (!app) return; 
+
+        // === MODIFIED: Check if this is the active page ===
         const isActive = (app.page === 'creditcard') ? 'active' : '';
+
         const navLink = document.createElement("li");
         navLink.innerHTML = `<a href="${app.page}.html" class="${isActive}"><span class="material-icons">${app.icon}</span> ${app.name}</a>`;
         navLinksList.appendChild(navLink);
       });
     }
+
+    // === NEW: Logout Button Logic (from access.html) ===
     document.getElementById("logout-button").addEventListener("click", function() {
       sessionStorage.removeItem("gretexUser");
       window.location.href = "index.html";
     });
+
     // --- End of Sidebar Logic ---
 
+
+    // === Original 'Craditcard.html' Logic (Resumes Below) ===
     
-    // --- Get Page Elements ---
     cardGridContainer = document.getElementById('card-grid-container');
     cardDetailContainer = document.getElementById('card-detail-container');
     backToGridLink = document.getElementById('back-to-grid-link');
@@ -697,12 +614,16 @@
     
     // --- Modal Event Listeners ---
     addNewCardBtn.addEventListener('click', () => showModal('add-card-modal'));
+    
     document.querySelectorAll('[data-close]').forEach(btn => {
       btn.addEventListener('click', () => closeModal(btn.dataset.close));
     });
+    
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
       overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) closeModal(overlay.id);
+        if (e.target === overlay) {
+          closeModal(overlay.id);
+        }
       });
     });
 
@@ -716,48 +637,35 @@
       const fileName = e.target.files.length > 0 ? e.target.files[0].name : 'No file selected.';
       document.getElementById('bill-attachment-name').textContent = fileName;
     });
+    
     document.getElementById('payment-attachment').addEventListener('change', (e) => {
       const fileName = e.target.files.length > 0 ? e.target.files[0].name : 'No file selected.';
       document.getElementById('payment-attachment-name').textContent = fileName;
     });
 
-    // --- View Navigation ---
+    // --- View Navigation Listeners ---
     backToGridLink.addEventListener('click', (e) => {
       e.preventDefault();
       showGridView();
     });
 
-
-    // --- ***** THIS IS THE CORRECTED FUNCTION ***** ---
+    // --- Dynamic Button Clicks (Event Delegation) ---
+    
     cardGridContainer.addEventListener('click', (e) => {
-      // --- FIX: Check for the button click *first* ---
-      const renewalBtn = e.target.closest('.btn-mark-renewal-done');
-      if (renewalBtn) {
-        // If the button was clicked, handle it and stop
-        renewalBtn.disabled = true;
-        renewalBtn.textContent = "Updating...";
-        handleMarkRenewalDone(renewalBtn.dataset.cardId, renewalBtn.dataset.year);
-        return; 
-      }
-
-      // If the button was *not* clicked, check if the card was
       const cardVisual = e.target.closest('.credit-card-visual');
       if (cardVisual) {
-        // If the card was clicked, open it
         const cardId = cardVisual.dataset.cardId;
         renderCardDetail(cardId);
       }
     });
-    // --- ***** END OF CORRECTED FUNCTION ***** ---
-
     
-    // Clicks inside the Detail container
     cardDetailContainer.addEventListener('click', (e) => {
       if (e.target.classList.contains('btn-add-bill')) {
         const cardId = e.target.dataset.cardId;
         document.getElementById('bill-card-id').value = cardId;
         showModal('add-bill-modal');
       }
+      
       if (e.target.classList.contains('btn-mark-paid')) {
         const billId = e.target.dataset.billId;
         const billAmount = e.target.dataset.billAmount;
@@ -765,6 +673,7 @@
         document.getElementById('payment-amount').value = billAmount;
         showModal('add-payment-modal');
       }
+
       if (e.target.classList.contains('btn-show-details')) {
         const encodedData = e.target.dataset.paymentDetails;
         if (encodedData) {
@@ -789,6 +698,7 @@
     cardGridContainer.style.display = 'grid';
     cardDetailContainer.style.display = 'none';
     backToGridLink.style.display = 'none';
+    
     addNewCardBtn.style.display = 'inline-flex';
     dashboardTitle.textContent = 'Credit Card Management';
   }
@@ -797,6 +707,7 @@
     cardGridContainer.style.display = 'none';
     cardDetailContainer.style.display = 'block';
     backToGridLink.style.display = 'inline-block';
+    
     addNewCardBtn.style.display = 'none';
     dashboardTitle.textContent = cardName;
   }
@@ -813,14 +724,11 @@
     const modal = document.getElementById(modalId);
     modal.classList.remove('visible');
     const form = modal.querySelector('form');
-    if (form) form.reset();
-    
-    // Reset file names
-    const billFileName = document.getElementById('bill-attachment-name');
-    if (billFileName) billFileName.textContent = 'No file selected.';
-    
-    const paymentFileName = document.getElementById('payment-attachment-name');
-    if (paymentFileName) paymentFileName.textContent = 'No file selected.';
+    if (form) {
+      form.reset();
+    }
+    document.getElementById('bill-attachment-name').textContent = 'No file selected.';
+    document.getElementById('payment-attachment-name').textContent = 'No file selected.';
   }
 
   // =================================================================
@@ -829,10 +737,14 @@
   
   async function loadDashboard() {
     showLoading(true);
+    
     const payload = {
       action: "getCreditCardDashboard",
-      params: { userName: currentUser.name }
+      params: { 
+        userName: currentUser.name 
+      }
     };
+    
     try {
       const res = await fetch(SCRIPT_URL, {
         method: 'POST',
@@ -840,9 +752,10 @@
         body: JSON.stringify(payload)
       });
       const json = await res.json();
+      
       if (json.status === "success") {
         allCardData = json.data; 
-        renderCardGrid(allCardData);
+        renderCardGrid(allCardData); // Render the grid
       } else {
         showError(json.data?.message || "Could not load data.");
       }
@@ -850,18 +763,23 @@
       showError("Network error: " + err.message);
     } finally {
       showLoading(false);
-      showGridView();
+      showGridView(); // Show the grid (even if empty)
     }
   }
   
+  /**
+    * Renders the grid of card visuals
+    */
   function renderCardGrid(cards) {
-    cardGridContainer.innerHTML = '';
+    cardGridContainer.innerHTML = ''; // Clear existing content
+    
     if (!cards || cards.length === 0) {
       cardGridContainer.innerHTML = `<div class="no-bills-message" style="background:var(--card-bg); padding: 30px; font-size: 1rem; grid-column: 1 / -1;">
         No credit cards found. Click 'Add New Card' to get started.
       </div>`;
       return;
     }
+    
     let gridHtml = '';
     cards.forEach(card => {
       const summary = calculateCardSummary(card);
@@ -870,52 +788,39 @@
     cardGridContainer.innerHTML = gridHtml;
   }
 
+  /**
+    * Calculates Total Due and Next Due Date for a card
+    */
   function calculateCardSummary(card) {
     const pendingBills = card.bills.filter(b => b.status === 'Pending');
+    
     if (pendingBills.length === 0) {
       return { totalDue: 0, earliestDueDate: "No Due found" };
     }
+    
     const totalDue = pendingBills.reduce((sum, bill) => sum + parseFloat(bill.amount), 0);
+    
     const earliestDueDate = pendingBills
       .map(b => new Date(b.dueDate))
       .sort((a, b) => a - b)[0]
-      .toISOString().split('T')[0];
+      .toISOString().split('T')[0]; // Format as YYYY-MM-DD
+
     return { totalDue, earliestDueDate };
   }
 
-  // ***** MODIFIED FUNCTION *****
+  /**
+    * Creates just the HTML for the card visual
+    */
   function createCardVisual(card, summary) {
     const dueAmountClass = summary.totalDue === 0 ? 'due-value zero' : 'due-value';
     const dueAmountString = summary.totalDue === 0 ? '₹0.00' : `₹${summary.totalDue.toFixed(2)}`;
     const dueDateClass = summary.totalDue === 0 ? 'due-value zero' : 'due-value';
     
-    // Get next renewal date and check if it's due
-    const { nextRenewal, isDue, renewalYearToMark } = getNextRenewalDate(card.renewalDate, card.lastRenewalYear);
-    
-    // Create the "Mark Done" button if it's due
-    let actionHtml = '';
-    if (isDue) {
-      actionHtml = `
-        <div class="card-renewal-action">
-          <button class="btn-mark-renewal-done" data-card-id="${card.id}" data-year="${renewalYearToMark}">
-            Mark as Done (${renewalYearToMark})
-          </button>
-        </div>
-      `;
-    }
-    
     return `
       <div class="credit-card-visual" data-card-id="${card.id}">
-        
-        <div class="card-top-info">
+        <div>
           <div class="card-issuer">${card.issuer}</div>
-          <div class="card-renewal">
-            <span class="due-label">Next Renewal</span>
-            <div class="due-value">${nextRenewal}</div>
-            ${actionHtml}
-          </div>
         </div>
-        
         <div>
           <div class="card-number">•••• ${card.last4}</div>
           <div class="card-name">${card.nameOnCard}</div>
@@ -934,36 +839,28 @@
     `;
   }
 
-  // ***** MODIFIED FUNCTION *****
+  /**
+    * Renders the full detail view for a single card
+    */
+  function renderCardDetail(cardId) {
+    const card = allCardData.find(c => c.id === cardId);
+    if (!card) {
+      showError("Card data not found.");
+      return;
+    }
+    
+    cardDetailContainer.innerHTML = createCardDetailModule(card);
+    showDetailView(card.issuer); // Show detail view and update title
+  }
+  
+  /**
+    * Creates the *detail* module.
+    */
   function createCardDetailModule(card) {
     const allBills = card.bills;
+    
     const summary = calculateCardSummary(card);
-    
-    // Re-create the card visual for the detail page
-    // We pass the summary so it's consistent
     const cardVisualHtml = createCardVisual(card, summary);
-    
-    const annualSpend = parseFloat(card.minSpend) || 0;
-    const monthlySpend = (annualSpend / 12);
-    
-    let spendHtml = '';
-    if (annualSpend > 0) {
-      spendHtml = `
-        <div class="spend-info-section">
-          <h3>Spend Targets</h3>
-          <div class="spend-grid">
-            <div>
-              <span>Annual Min. Spend</span>
-              <strong>₹${annualSpend.toLocaleString('en-IN')}</strong>
-            </div>
-            <div>
-              <span>Est. Monthly Spend</span>
-              <strong>₹${monthlySpend.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</strong>
-            </div>
-          </div>
-        </div>
-      `;
-    }
     
     return `
       <div class="card-module">
@@ -972,8 +869,6 @@
         </div>
         
         <div class="card-module-body">
-          ${spendHtml}
-          
           <div class="bill-section">
             <div class="bill-section-header">
               <h3>Bills</h3>
@@ -990,20 +885,35 @@
     `;
   }
   
+  /**
+    * Renders the HTML for a single bill table with dynamic actions
+    */
   function renderBillTable(bills) {
     if (bills.length === 0) {
       return `<div class="no-bills-message">No bills found for this card.</div>`;
     }
-    let headers = `<th>Bill #</th><th>Bill Date</th><th>Due Date</th><th>Amount</th><th>Bill Attachment</th><th>Actions</th>`;
+    
+    let headers = `
+      <th>Bill #</th>
+      <th>Bill Date</th>
+      <th>Due Date</th>
+      <th>Amount</th>
+      <th>Bill Attachment</th>
+      <th>Actions</th>`;
+    
     const rows = bills.map(bill => {
       const billDate = bill.billDate ? new Date(bill.billDate).toISOString().split('T')[0] : 'N/A';
       const dueDate = bill.dueDate ? new Date(bill.dueDate).toISOString().split('T')[0] : 'N/A';
+
       const billAttachmentLink = (bill.billAttachmentURL && bill.billAttachmentURL.startsWith('http'))
-        ? `<a href="${bill.billAttachmentURL}" target="_blank">View Bill</a>` : 'N/A';
+        ? `<a href="${bill.billAttachmentURL}" target="_blank">View Bill</a>`
+        : 'N/A';
       
       let actionButton = '';
       if (bill.status === 'Pending') {
-        actionButton = `<button class="btn-paid btn-mark-paid" data-bill-id="${bill.id}" data-bill-amount="${bill.amount}">Mark as Paid</button>`;
+        actionButton = `<button class="btn-paid btn-mark-paid" data-bill-id="${bill.id}" data-bill-amount="${bill.amount}">
+                          Mark as Paid
+                        </button>`;
       } else { 
         const paymentData = {
           billNumber: bill.billNumber,
@@ -1013,14 +923,37 @@
           paidBy: bill.paidBy,
           paymentAttachmentURL: bill.paymentAttachmentURL
         };
+        
         const encodedPaymentData = btoa(JSON.stringify(paymentData)); 
-        actionButton = `<button class="btn-secondary btn-show-details" data-payment-details="${encodedPaymentData}">Paid - Show Details</button>`;
+
+        actionButton = `<button class="btn-secondary btn-show-details" data-payment-details="${encodedPaymentData}">
+                          Paid - Show Details
+                        </button>`;
       }
-      return `<tr><td>${bill.billNumber}</td><td>${billDate}</td><td>${dueDate}</td><td class="amount">₹${parseFloat(bill.amount).toFixed(2)}</td><td>${billAttachmentLink}</td><td>${actionButton}</td></tr>`;
+
+      return `
+        <tr>
+          <td>${bill.billNumber}</td>
+          <td>${billDate}</td>
+          <td>${dueDate}</td>
+          <td class="amount">₹${parseFloat(bill.amount).toFixed(2)}</td>
+          <td>${billAttachmentLink}</td>
+          <td>${actionButton}</td>
+        </tr>
+      `;
     }).join('');
-    return `<table class="bill-table"><thead><tr>${headers}</tr></thead><tbody>${rows}</tbody></table>`;
+    
+    return `
+      <table class="bill-table">
+        <thead><tr>${headers}</tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    `;
   }
   
+  /**
+    * Show/hide spinner and containers
+    */
   function showLoading(isLoading) {
     if (loadingSpinner) {
       loadingSpinner.style.display = isLoading ? 'block' : 'none';
@@ -1032,7 +965,7 @@
   }
   
   function showError(message) {
-    alert("Error: " + message); // This line is now fixed
+    alert("Error: " + message);
     cardGridContainer.innerHTML = `<div class="no-bills-message" style="background:#fff8f8; color: #c00; grid-column: 1 / -1;">${message}</div>`;
   }
 
@@ -1045,17 +978,17 @@
     const btn = document.getElementById('save-card-btn');
     btn.disabled = true;
     btn.textContent = "Saving...";
+    
     const payload = {
       action: "addCreditCard",
       params: {
         issuer: document.getElementById('card-issuer').value,
         last4: document.getElementById('card-last-4').value,
         nameOnCard: document.getElementById('card-name').value,
-        addedBy: currentUser.name,
-        renewalDate: document.getElementById('card-renewal-date').value,
-        minSpend: parseFloat(document.getElementById('card-min-spend').value)
+        addedBy: currentUser.name
       }
     };
+    
     try {
       const res = await fetch(SCRIPT_URL, {
         method: 'POST',
@@ -1063,6 +996,7 @@
         body: JSON.stringify(payload)
       });
       const json = await res.json();
+      
       if (json.status === "success") {
         closeModal('add-card-modal');
         loadDashboard(); // Refresh
@@ -1082,6 +1016,7 @@
     const btn = document.getElementById('save-bill-btn');
     btn.disabled = true;
     btn.textContent = "Saving...";
+    
     const fileInput = document.getElementById('bill-attachment');
     let attachmentData = null;
     if (fileInput.files.length > 0) {
@@ -1092,6 +1027,7 @@
         data: await fileToBase64(file)
       };
     }
+    
     const payload = {
       action: "addBill",
       params: {
@@ -1104,6 +1040,7 @@
         attachment: attachmentData
       }
     };
+    
     try {
       const res = await fetch(SCRIPT_URL, {
         method: 'POST',
@@ -1111,6 +1048,7 @@
         body: JSON.stringify(payload)
       });
       const json = await res.json();
+      
       if (json.status === "success") {
         closeModal('add-bill-modal');
         loadDashboard();
@@ -1130,6 +1068,7 @@
     const btn = document.getElementById('save-payment-btn');
     btn.disabled = true;
     btn.textContent = "Saving...";
+    
     const fileInput = document.getElementById('payment-attachment');
     let attachmentData = null;
     if (fileInput.files.length > 0) {
@@ -1140,6 +1079,7 @@
         data: await fileToBase64(file)
       };
     }
+    
     const payload = {
       action: "markBillPaid",
       params: {
@@ -1151,6 +1091,7 @@
         attachment: attachmentData
       }
     };
+    
     try {
       const res = await fetch(SCRIPT_URL, {
         method: 'POST',
@@ -1158,6 +1099,7 @@
         body: JSON.stringify(payload)
       });
       const json = await res.json();
+      
       if (json.status === "success") {
         closeModal('add-payment-modal');
         loadDashboard();
@@ -1172,42 +1114,9 @@
     }
   }
   
-  // --- ***** NEW FUNCTION ***** ---
   /**
-   * Handles the click of the "Mark Renewal Done" button
-   */
-  async function handleMarkRenewalDone(cardId, year) {
-    const payload = {
-      action: "markRenewalDone",
-      params: {
-        cardId: cardId,
-        year: year
-      }
-    };
-    
-    try {
-      const res = await fetch(SCRIPT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(payload)
-      });
-      const json = await res.json();
-      
-      if (json.status === "success") {
-        // Refresh the dashboard to show the updated date
-        loadDashboard(); 
-      } else {
-        alert("Error: " + (json.data?.message || "Could not update renewal."));
-      }
-    } catch (err) {
-      alert("Network Error: " + err.message);
-      // Re-enable button on failure
-      const btn = document.querySelector(`.btn-mark-renewal-done[data-card-id="${cardId}"]`);
-      if (btn) btn.disabled = false;
-    }
-  }
-  
-  
+    * Helper function to convert a file to a Base64 string
+    */
   function fileToBase64(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -1220,15 +1129,21 @@
     });
   }
 
-  // --- (Unchanged from here) ---
+  // =================================================================
+  // FUNCTION TO OPEN PAYMENT DETAILS IN A NEW TAB
+  // =================================================================
+
   function openPaymentDetailsTab(data) {
     const attachmentHtml = (data.paymentAttachmentURL && data.paymentAttachmentURL.startsWith('http'))
         ? `<p><a href="${data.paymentAttachmentURL}" target="_blank" style="font-size: 1.2rem; color: #0056b3;">View Payment Attachment</a></p>`
         : '<p>No payment attachment found.</p>';
+
     const htmlContent = `
-        <!DOCTYPE html><html lang="en">
+        <!DOCTYPE html>
+        <html lang="en">
         <head>
-            <meta charset="UTF-8"><title>Payment Details - ${data.billNumber}</title>
+            <meta charset="UTF-8">
+            <title>Payment Details - ${data.billNumber}</title>
             <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
             <style>
                 body { font-family: 'Poppins', sans-serif; background: #f4f7fa; padding: 40px; color: #333; }
@@ -1237,7 +1152,9 @@
                 .detail-grid { display: grid; grid-template-columns: 200px 1fr; gap: 16px; }
                 .detail-grid strong { font-weight: 600; color: #555; }
                 .detail-grid span { font-weight: 500; color: #111; }
-                p { line-height: 1.6; } a { color: #0056b3; text-decoration: none; } a:hover { text-decoration: underline; }
+                p { line-height: 1.6; }
+                a { color: #0056b3; text-decoration: none; }
+                a:hover { text-decoration: underline; }
             </style>
         </head>
         <body>
@@ -1253,8 +1170,10 @@
                 <hr style="border: 0; border-top: 1px solid #e9eef2; margin: 24px 0;">
                 ${attachmentHtml}
             </div>
-        </body></html>
+        </body>
+        </html>
     `;
+    
     const newTab = window.open();
     newTab.document.write(htmlContent);
     newTab.document.close();
