@@ -730,23 +730,42 @@
     });
 
     // --- ***** MODIFIED: Dynamic Button Clicks ***** ---
-    cardGridContainer.addEventListener('click', (e) => {
-      // View Card Detail
-      const cardVisual = e.target.closest('.credit-card-visual');
-      if (cardVisual) {
-        // Prevent click if clicking the "Mark Done" button
-        if (e.target.closest('.btn-mark-renewal-done')) return; 
+    // cardGridContainer.addEventListener('click', (e) => {
+    //   // View Card Detail
+    //   const cardVisual = e.target.closest('.credit-card-visual');
+    //   if (cardVisual) {
+    //     // Prevent click if clicking the "Mark Done" button
+    //     if (e.target.closest('.btn-mark-renewal-done')) return; 
         
-        const cardId = cardVisual.dataset.cardId;
-        renderCardDetail(cardId);
-      }
+    //     const cardId = cardVisual.dataset.cardId;
+    //     renderCardDetail(cardId);
+    //   }
       
-      // Mark Renewal Done
+    //   // Mark Renewal Done
+    //   const renewalBtn = e.target.closest('.btn-mark-renewal-done');
+    //   if (renewalBtn) {
+    //     renewalBtn.disabled = true;
+    //     renewalBtn.textContent = "Updating...";
+    //     handleMarkRenewalDone(renewalBtn.dataset.cardId, renewalBtn.dataset.year);
+    //   }
+    // });
+
+    // --- ***** MODIFIED: Dynamic Button Clicks ***** ---
+    cardGridContainer.addEventListener('click', (e) => {
+      // --- FIX: Check for the button click *first* ---
       const renewalBtn = e.target.closest('.btn-mark-renewal-done');
       if (renewalBtn) {
         renewalBtn.disabled = true;
         renewalBtn.textContent = "Updating...";
         handleMarkRenewalDone(renewalBtn.dataset.cardId, renewalBtn.dataset.year);
+        return; // Stop processing the click
+      }
+
+      // If the button wasn't clicked, check if the card was
+      const cardVisual = e.target.closest('.credit-card-visual');
+      if (cardVisual) {
+        const cardId = cardVisual.dataset.cardId;
+        renderCardDetail(cardId);
       }
     });
     
