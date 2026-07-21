@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gretex Emp Master — Login</title>
+<style>
+
+    :root{
+      --bg:#0b1120; --bg-soft:#111a2e; --surface:#16213a; --surface-2:#1c2a47;
+      --border:#26385c; --text:#e7ecf6; --text-dim:#93a2c2; --text-faint:#5f708f;
+      --accent:#4f7dff; --accent-2:#7c5cff; --accent-soft:#20305a;
+      --green:#2ecc8f; --amber:#ffb545; --red:#ff5d6c;
+      --radius:14px; --radius-sm:9px;
+      --shadow:0 10px 30px rgba(0,0,0,.35);
+      --font:'Segoe UI',system-ui,-apple-system,Roboto,Arial,sans-serif;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:var(--font);background:
+      radial-gradient(1200px 600px at 10% -10%, #16244a 0%, transparent 60%),
+      radial-gradient(1000px 500px at 100% 0%, #201a44 0%, transparent 55%),
+      var(--bg);color:var(--text);min-height:100vh;}
+    a{color:inherit}
+    ::-webkit-scrollbar{width:10px;height:10px}
+    ::-webkit-scrollbar-thumb{background:var(--surface-2);border-radius:8px}
+
+    .app-shell{display:flex;min-height:100vh}
+    .sidebar{width:230px;flex-shrink:0;background:linear-gradient(180deg,var(--bg-soft),#0d1526);
+      border-right:1px solid var(--border);padding:22px 16px;position:sticky;top:0;height:100vh}
+    .brand{display:flex;align-items:center;gap:10px;margin-bottom:28px;padding:0 4px}
+    .brand-mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));
+      display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;box-shadow:0 6px 16px rgba(79,125,255,.4)}
+    .brand-text{line-height:1.15}
+    .brand-text b{font-size:15px;display:block}
+    .brand-text span{font-size:11px;color:var(--text-dim)}
+    .nav a{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:10px;
+      color:var(--text-dim);text-decoration:none;font-size:14px;font-weight:500;margin-bottom:4px;transition:.15s}
+    .nav a:hover{background:var(--surface);color:var(--text)}
+    .nav a.active{background:var(--accent-soft);color:#cfe0ff;box-shadow:inset 0 0 0 1px rgba(124,92,255,.35)}
+    .nav .ico{width:18px;text-align:center;font-size:15px}
+    .sidebar-foot{position:absolute;bottom:20px;left:16px;right:16px}
+    .userchip{display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;background:var(--surface);margin-bottom:8px}
+    .userchip .av{width:30px;height:30px;border-radius:50%;background:var(--accent-2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+    .userchip .who{font-size:12.5px;line-height:1.2}
+    .userchip .who b{display:block;font-size:13px}
+    .logout-btn{width:100%;padding:9px;border-radius:9px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;font-size:13px}
+    .logout-btn:hover{background:var(--surface);color:var(--red)}
+
+    .main{flex:1;padding:26px 32px;max-width:100%;overflow-x:hidden}
+    .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;flex-wrap:wrap;gap:12px}
+    .topbar h1{font-size:21px;margin:0}
+    .topbar p{margin:2px 0 0;color:var(--text-dim);font-size:13px}
+
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+    .search{flex:1;min-width:220px;background:var(--bg-soft);border:1px solid var(--border);border-radius:10px;
+      padding:10px 14px;color:var(--text);font-size:14px}
+    .search:focus{outline:none;border-color:var(--accent)}
+    .btn{border:none;border-radius:10px;padding:10px 16px;font-size:13.5px;font-weight:600;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:6px}
+    .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff}
+    .btn-primary:hover{filter:brightness(1.08)}
+    .btn-ghost{background:var(--surface-2);color:var(--text)}
+    .btn-ghost:hover{background:#233a5e}
+    .btn-danger{background:rgba(255,93,108,.12);color:var(--red);border:1px solid rgba(255,93,108,.35)}
+    .btn-danger:hover{background:rgba(255,93,108,.2)}
+    .btn-amber{background:rgba(255,181,69,.12);color:var(--amber);border:1px solid rgba(255,181,69,.35)}
+    .btn-amber:hover{background:rgba(255,181,69,.2)}
+    .btn-green{background:rgba(46,204,143,.12);color:var(--green);border:1px solid rgba(46,204,143,.35)}
+    .btn-green:hover{background:rgba(46,204,143,.2)}
+    .btn-sm{padding:6px 10px;font-size:12px;border-radius:8px}
+    .btn:disabled{opacity:.5;cursor:not-allowed}
+
+    table{width:100%;border-collapse:collapse;font-size:13.5px}
+    thead th{text-align:left;padding:11px 14px;color:var(--text-dim);font-weight:600;font-size:12px;
+      text-transform:uppercase;letter-spacing:.03em;border-bottom:1px solid var(--border);white-space:nowrap;position:sticky;top:0;background:var(--surface)}
+    tbody td{padding:11px 14px;border-bottom:1px solid var(--border);white-space:nowrap}
+    tbody tr:hover{background:var(--surface-2)}
+    .table-wrap{overflow:auto;max-height:65vh;border-radius:var(--radius-sm)}
+    .pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:700}
+    .pill-blue{background:rgba(79,125,255,.15);color:#9db6ff}
+    .pill-green{background:rgba(46,204,143,.15);color:var(--green)}
+    .pill-amber{background:rgba(255,181,69,.15);color:var(--amber)}
+    .pill-red{background:rgba(255,93,108,.15);color:var(--red)}
+    .actions-cell{display:flex;gap:6px}
+    .empty-state{text-align:center;padding:60px 20px;color:var(--text-faint)}
+    .loading{text-align:center;padding:50px;color:var(--text-dim)}
+
+    .modal-overlay{position:fixed;inset:0;background:rgba(5,8,18,.65);backdrop-filter:blur(3px);
+      display:none;align-items:flex-start;justify-content:center;z-index:100;padding:40px 16px;overflow:auto}
+    .modal-overlay.show{display:flex}
+    .modal{background:var(--bg-soft);border:1px solid var(--border);border-radius:var(--radius);
+      width:100%;max-width:840px;box-shadow:var(--shadow);animation:pop .15s ease}
+    @keyframes pop{from{transform:translateY(8px);opacity:0}to{transform:translateY(0);opacity:1}}
+    .modal-head{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid var(--border)}
+    .modal-head h3{margin:0;font-size:16px}
+    .modal-close{background:none;border:none;color:var(--text-dim);font-size:20px;cursor:pointer}
+    .modal-body{padding:20px 22px;max-height:70vh;overflow:auto}
+    .modal-foot{padding:16px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px}
+    fieldset{border:1px solid var(--border);border-radius:10px;margin-bottom:14px;padding:12px 16px}
+    legend{font-size:12px;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:0 6px}
+    .field-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+    .field label{display:block;font-size:12px;color:var(--text-dim);margin-bottom:5px}
+    .field input,.field select,.field textarea{width:100%;background:var(--surface);border:1px solid var(--border);
+      border-radius:8px;padding:9px 10px;color:var(--text);font-size:13.5px;font-family:var(--font)}
+    .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--accent)}
+    .field textarea{resize:vertical;min-height:60px}
+
+    .toast-wrap{position:fixed;top:18px;right:18px;z-index:200;display:flex;flex-direction:column;gap:8px}
+    .toast{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--accent);
+      padding:12px 16px;border-radius:10px;font-size:13.5px;box-shadow:var(--shadow);min-width:240px;animation:slide .2s ease}
+    .toast.success{border-left-color:var(--green)}
+    .toast.error{border-left-color:var(--red)}
+    @keyframes slide{from{transform:translateX(20px);opacity:0}to{transform:translateX(0);opacity:1}}
+
+    .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:22px}
+    .kpi{padding:20px;border-radius:var(--radius);position:relative;overflow:hidden}
+    .kpi .n{font-size:30px;font-weight:800;margin:2px 0}
+    .kpi .l{font-size:12.5px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.03em}
+    .kpi .ico{position:absolute;right:16px;top:16px;font-size:26px;opacity:.35}
+    .charts-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:18px}
+    @media (max-width:900px){.charts-grid{grid-template-columns:1fr}}
+    .chart-card{padding:20px}
+    .chart-card h3{margin:0 0 14px;font-size:14px;color:var(--text-dim);font-weight:600}
+    .bar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:12.5px}
+    .bar-label{width:130px;flex-shrink:0;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .bar-track{flex:1;height:9px;background:var(--surface-2);border-radius:6px;overflow:hidden}
+    .bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));border-radius:6px}
+    .bar-val{width:30px;text-align:right;color:var(--text-dim)}
+
+    @media (max-width:760px){
+      .app-shell{flex-direction:column}
+      .sidebar{width:100%;height:auto;position:relative;padding:14px}
+      .main{padding:18px}
+    }
+
+    .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+    .login-card{width:100%;max-width:400px;background:var(--surface);border:1px solid var(--border);
+      border-radius:18px;padding:38px 32px;box-shadow:var(--shadow)}
+    .login-logo{width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent-2));
+      display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;margin:0 auto 16px;
+      box-shadow:0 8px 22px rgba(79,125,255,.4)}
+    .login-card h1{text-align:center;font-size:19px;margin:0 0 4px}
+    .login-card p.sub{text-align:center;color:var(--text-dim);font-size:13px;margin:0 0 26px}
+    .login-card .field{margin-bottom:16px}
+    .login-card label{display:block;font-size:12.5px;color:var(--text-dim);margin-bottom:6px}
+    .login-card input{width:100%;background:var(--bg-soft);border:1px solid var(--border);border-radius:10px;
+      padding:11px 13px;color:var(--text);font-size:14px}
+    .login-card input:focus{outline:none;border-color:var(--accent)}
+    .login-card .btn-primary{width:100%;padding:12px;font-size:14px;margin-top:6px}
+    .login-err{color:var(--red);font-size:12.5px;text-align:center;margin-top:12px;min-height:16px}
+    .login-foot{text-align:center;color:var(--text-faint);font-size:11.5px;margin-top:22px}
+</style>
+</head>
+<body>
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-logo">GX</div>
+      <h1>Gretex Emp Master</h1>
+      <p class="sub">Employee Lifecycle Management</p>
+      <form id="loginForm">
+        <div class="field">
+          <label>User ID</label>
+          <input type="text" id="username" autocomplete="username" required>
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" id="password" autocomplete="current-password" required>
+        </div>
+        <button type="submit" class="btn btn-primary" id="loginBtn">Login</button>
+        <div class="login-err" id="loginErr"></div>
+      </form>
+      <div class="login-foot">Gretex Group · Internal Use Only</div>
+    </div>
+  </div>
+
+<script>
+    // Bhai, yahan apna deployed Apps Script Web App URL (…/exec) paste karo.
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzcLIgiumk49XlL7ngXYjtsRmUc93DC8mIZQZhv3b-hHBTZyXKVBkjWzUzySbI_FNlx/exec';
+
+    // Agar already logged in hai to seedha dashboard pe bhej do
+    (function(){
+      try{
+        const u = JSON.parse(sessionStorage.getItem('gretex_user') || 'null');
+        if(u) window.location.href = 'dashboard.html';
+      }catch(e){}
+    })();
+
+    document.getElementById('loginForm').addEventListener('submit', async function(e){
+      e.preventDefault();
+      const btn = document.getElementById('loginBtn');
+      const errEl = document.getElementById('loginErr');
+      errEl.textContent = '';
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      btn.disabled = true; btn.textContent = 'Logging in...';
+      try{
+        const qs = new URLSearchParams({ action: 'login', username, password }).toString();
+        const res = await fetch(`${APPS_SCRIPT_URL}?${qs}`);
+        const json = await res.json();
+        if(!json.success) throw new Error(json.error || 'Login failed');
+        sessionStorage.setItem('gretex_user', JSON.stringify(json.data));
+        window.location.href = 'dashboard.html';
+      }catch(err){
+        errEl.textContent = err.message || 'Login failed. Check User ID / Password.';
+      }finally{
+        btn.disabled = false; btn.textContent = 'Login';
+      }
+    });
+</script>
+</body>
+</html>
